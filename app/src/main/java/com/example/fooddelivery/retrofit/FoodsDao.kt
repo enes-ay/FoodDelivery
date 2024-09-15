@@ -12,8 +12,10 @@ interface FoodsDao {
     @GET("tumYemekleriGetir.php")
     suspend fun getAllFoods() : FoodsApiResponse
 
-    @GET("yemekler/sepettekiYemekleriGetir.php")
-    suspend fun getFoodsInCart() : CartApiResponse
+    @POST("yemekler/sepettekiYemekleriGetir.php")
+    suspend fun getFoodsInCart(
+        @Field("kullanici_adi") kullanici_adi: String
+    ) : CartApiResponse
 
     @POST("yemekler/sepeteYemekEkle.php")
     suspend fun addFoodToCart(
@@ -21,7 +23,7 @@ interface FoodsDao {
         @Field("yemek_resim_adi")  yemek_resim_adi : String,
         @Field("yemek_fiyat")  yemek_fiyat: Int,
         @Field("yemek_siparis_adet")  yemek_siparis_adet: Int,
-        @Field("kullanici_adi")  kullaniic_adi: String,
+        @Field("kullanici_adi")  kullanici_adi: String,
 
     ) : AddFoodResponse
 
