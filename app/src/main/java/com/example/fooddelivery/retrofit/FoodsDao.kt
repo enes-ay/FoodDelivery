@@ -9,7 +9,7 @@ import retrofit2.http.POST
 
 interface FoodsDao {
 
-    @GET("tumYemekleriGetir.php")
+    @GET("yemekler/tumYemekleriGetir.php")
     suspend fun getAllFoods() : FoodsApiResponse
 
     @POST("yemekler/sepettekiYemekleriGetir.php")

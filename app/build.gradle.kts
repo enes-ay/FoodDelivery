@@ -81,9 +81,12 @@ dependencies {
     // Dagger-Hilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.6.0")
-    implementation("com.google.code.gson:gson:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
+
+    // Glide
+    implementation("com.github.skydoves:landscapist-glide:1.3.7")
 }
