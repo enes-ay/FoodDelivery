@@ -1,15 +1,18 @@
 package com.example.fooddelivery
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
@@ -18,13 +21,20 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.fooddelivery.ui.presentation.NavGraph
@@ -47,12 +57,7 @@ class MainActivity : ComponentActivity() {
                             BottomBar(navController)
                         }
                     }, modifier = Modifier
-                        .fillMaxSize()
-                        .padding(
-                            bottom = WindowInsets.navigationBars
-                                .asPaddingValues()
-                                .calculateBottomPadding()
-                        ) // This adds padding for the system navigation
+                        .fillMaxSize() // This adds padding for the system navigation
                 ) { paddingValues ->
                     NavGraph(paddingValues, navController)
                 }
@@ -72,34 +77,50 @@ fun shouldShowBottomBar(navController: NavController): Boolean {
 
 @Composable
 fun BottomBar(navController: NavController) {
-    BottomNavigation (backgroundColor = Color.White) {
-        val items = listOf(
-            Screens.Home,
-            Screens.Cart,
-            Screens.Profile,
-            Screens.Favorites,
-        )
+
+    val items = listOf(
+        Screens.Home,
+        Screens.Cart,
+        Screens.Profile,
+        Screens.Favorites,
+    )
+    NavigationBar(
+        containerColor = Color.White,
+        contentColor = Color.Black,
+    ) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+
         items.forEach { item ->
-            BottomNavigationItem(
+            NavigationBarItem(
+                selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                onClick = {
+                    navController.navigate(item.route) {
+                        // Pop up to the start destination of the graph to
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
+                    }
+                },
                 icon = {
                     when (item.label) {
                         "Home" -> Icon(Icons.Default.Home, contentDescription = "Home")
-                        "Favorites" -> Icon(
-                            Icons.Default.Favorite,
-                            contentDescription = "Favorites"
-                        )
-
+                        "Favorites" -> Icon(Icons.Default.Favorite, contentDescription = "Favorites")
                         "Cart" -> Icon(Icons.Default.ShoppingCart, contentDescription = "Cart")
                         "Profile" -> Icon(Icons.Default.Person, contentDescription = "Profile")
                     }
-                },
-                label = { Text(item.label) },
-                selected = navController.currentDestination?.route == item.route,
-                onClick = {
-                    navController.navigate(item.route)
-                }
-            )
+                       }
+                ,
+                label = { Text(text = item.label) })
         }
+
     }
 }
 

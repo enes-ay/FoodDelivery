@@ -20,10 +20,13 @@ fun NavGraph(paddingValues: PaddingValues, navController: NavHostController) {
             FoodListScreen()
         }
         composable("cart"){
-            FoodListScreen()
+            CartScreen()
         }
         composable("favorites"){
             Favorites()
+        }
+        composable("profile"){
+            ProfileScreen()
         }
     }
 }
