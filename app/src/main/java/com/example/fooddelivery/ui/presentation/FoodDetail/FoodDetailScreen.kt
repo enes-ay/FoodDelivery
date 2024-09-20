@@ -24,9 +24,9 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
             .padding(paddingValues),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("food ${food.yemek_id}",)
-            Text("food ${food.yemek_adi}",)
-            Text("food ${food.yemek_fiyat}",)
+            Text("food id ${food.yemek_id}",)
+            Text("name${food.yemek_adi}",)
+            Text("price ${food.yemek_fiyat}",)
         }
 
     }

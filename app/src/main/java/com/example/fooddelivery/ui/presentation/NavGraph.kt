@@ -2,6 +2,7 @@ package com.example.fooddelivery.ui.presentation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,8 +18,7 @@ import com.example.fooddelivery.ui.presentation.FoodList.FoodListScreen
 import com.google.gson.Gson
 
 @Composable
-fun NavGraph() {
-    val navController = rememberNavController()
+fun NavGraph(navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = "foodList" ){
         composable("foodList"){

@@ -1,5 +1,6 @@
 package com.example.fooddelivery.ui.presentation.FoodList
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ import com.example.fooddelivery.BottomBar
 import com.example.fooddelivery.R
 import com.example.fooddelivery.data.model.Yemekler
 import com.example.fooddelivery.utils.Constants
+import com.google.gson.Gson
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,6 +79,11 @@ fun FoodListScreen(navController: NavHostController) {
                         },
                         onRemoveFromCart = {
                             // foodListViewmodel.deleteFoodFromCart(food.yemek_id.toInt(),"enes")
+                        },
+                        onClick = {
+                            val foodJson = Gson().toJson(food)
+                            navController.navigate("foodDetail/$foodJson")
+                            Log.e("item","clicked")
                         })
                 }
             }
@@ -91,7 +98,8 @@ fun FoodItemCard(
     food: Yemekler,
     initialCount: Int = 0, // Use this to initialize the count, maybe fetched from the cart
     onAddToCart: (Yemekler) -> Unit,
-    onRemoveFromCart: (Yemekler) -> Unit
+    onRemoveFromCart: (Yemekler) -> Unit,
+    onClick: () -> Unit
 ) {
     var count by remember { mutableStateOf(initialCount) }
 
@@ -99,7 +107,7 @@ fun FoodItemCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                // Navigate to detail screen if needed
+                onClick()
             },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
