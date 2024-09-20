@@ -17,7 +17,7 @@ class FoodsDataSource(var foodsDao: FoodsDao) {
                               yemek_siparis_adet: Int, kullanici_adi: String) :  AddFoodResponse = withContext(Dispatchers.IO) {
         return@withContext foodsDao.addFoodToCart(yemek_adi, yemek_resim_adi, yemek_fiyat, yemek_siparis_adet, kullanici_adi)
     }
-    suspend fun deleteFoodFromCart(sepet_yemek_id:Int, kullanici_adi: String)  = withContext(Dispatchers.IO){ foodsDao.deleteFood(sepet_yemek_id, kullanici_adi)
+    suspend fun deleteFoodFromCart(sepet_yemek_id:Int, kullanici_adi: String)  = withContext(Dispatchers.IO){
         foodsDao.deleteFood(sepet_yemek_id, kullanici_adi)
     }
     suspend fun getFoodsInCart(kullanici_adi: String) :  List<SepetYemekler> = withContext(Dispatchers.IO){

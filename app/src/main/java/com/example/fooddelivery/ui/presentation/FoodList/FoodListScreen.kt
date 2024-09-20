@@ -1,7 +1,5 @@
-package com.example.fooddelivery.ui.presentation
+package com.example.fooddelivery.ui.presentation.FoodList
 
-import android.app.Activity
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,10 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,23 +28,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.fooddelivery.BottomBar
 import com.example.fooddelivery.R
 import com.example.fooddelivery.data.model.Yemekler
 import com.example.fooddelivery.utils.Constants
-import com.google.gson.Gson
 import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FoodListScreen(modifier: Modifier = Modifier) {
+fun FoodListScreen(navController: NavHostController) {
     val foodListViewmodel: FoodListViewmodel = hiltViewModel()
     val foodList by foodListViewmodel.foodList.observeAsState()
 
@@ -57,7 +50,8 @@ fun FoodListScreen(modifier: Modifier = Modifier) {
         foodListViewmodel.getAllFoods()
     }
     Scaffold(modifier = Modifier.fillMaxSize(),
-        topBar = { TopAppBar(title = { Text(text = "Food List") }) }) { paddingValues ->
+        topBar = { TopAppBar(title = { Text(text = "Food List") }) },
+        bottomBar = { BottomBar(navController = navController) }) { paddingValues ->
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxSize()
@@ -65,12 +59,24 @@ fun FoodListScreen(modifier: Modifier = Modifier) {
             columns = GridCells.Fixed(2)
         ) {
             foodList?.let {
+
+                for (food in foodList!!) {
+                    println("food ${food.yemek_id} ${food.yemek_adi}")
+                }
                 items(it.count()) {
                     val food = foodList!![it]
                     FoodItemCard(food = food,
-                        onAddToCart = {},
+                        onAddToCart = {
+                            foodListViewmodel.addFoodToCart(
+                                food.yemek_adi,
+                                food.yemek_resim_adi,
+                                food.yemek_fiyat,
+                                1,
+                                "enes"
+                            )
+                        },
                         onRemoveFromCart = {
-
+                            // foodListViewmodel.deleteFoodFromCart(food.yemek_id.toInt(),"enes")
                         })
                 }
             }
@@ -133,7 +139,10 @@ fun FoodItemCard(
                             onRemoveFromCart(food) // Call the API to remove the item
                         }
                     ) {
-                        Icon( painter = painterResource(id = R.drawable.ic_remove_circle), contentDescription = "icon remove" )
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_remove_circle),
+                            contentDescription = "icon remove"
+                        )
                     }
                 } else {
                     Spacer(modifier = Modifier.size(36.dp)) // Reserve space when "-" button is not visible

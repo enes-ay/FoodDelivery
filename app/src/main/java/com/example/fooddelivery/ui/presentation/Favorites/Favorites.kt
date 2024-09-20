@@ -1,4 +1,4 @@
-package com.example.fooddelivery.ui.presentation
+package com.example.fooddelivery.ui.presentation.Favorites
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

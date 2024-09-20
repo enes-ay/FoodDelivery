@@ -49,18 +49,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FoodDeliveryTheme {
-                val navController = rememberNavController()
-
-                Scaffold(
-                    bottomBar = {
-                        if (shouldShowBottomBar(navController)) {
-                            BottomBar(navController)
-                        }
-                    }, modifier = Modifier
-                        .fillMaxSize() // This adds padding for the system navigation
-                ) { paddingValues ->
-                    NavGraph(paddingValues, navController)
-                }
+                    NavGraph()
             }
         }
 
@@ -72,7 +61,7 @@ class MainActivity : ComponentActivity() {
 fun shouldShowBottomBar(navController: NavController): Boolean {
     // Don't show the bottom bar on the login page
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    return currentRoute != "login"
+    return currentRoute != "cart    "
 }
 
 @Composable

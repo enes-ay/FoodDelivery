@@ -1,4 +1,4 @@
-package com.example.fooddelivery.ui.presentation
+package com.example.fooddelivery.ui.presentation.FoodList
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,6 +27,12 @@ class FoodListViewmodel @Inject constructor(val foodRepo: FoodsRepository): View
                       yemek_siparis_adet: Int, kullanici_adi: String){
         CoroutineScope(Dispatchers.Main).launch {
             foodRepo.addFoodToCart(yemek_adi, yemek_resim_adi, yemek_fiyat, yemek_siparis_adet, kullanici_adi)
+        }
+    }
+
+    fun deleteFoodFromCart(sepet_yemek_id: Int, kullanici_adi: String){
+        CoroutineScope(Dispatchers.Main).launch {
+            foodRepo.deleteFoodFromCart(sepet_yemek_id, kullanici_adi)
         }
     }
 }
