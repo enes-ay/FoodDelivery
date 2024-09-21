@@ -1,8 +1,11 @@
 package com.example.fooddelivery.retrofit
 
+import android.database.Observable
 import com.example.fooddelivery.data.model.AddFoodResponse
 import com.example.fooddelivery.data.model.CartApiResponse
 import com.example.fooddelivery.data.model.FoodsApiResponse
+import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -17,7 +20,8 @@ interface FoodsDao {
     @FormUrlEncoded
     suspend fun getFoodsInCart(
         @Field("kullanici_adi") kullanici_adi: String
-    ) : CartApiResponse
+    ) : Response<CartApiResponse?>
+
 
     @POST("yemekler/sepeteYemekEkle.php")
     @FormUrlEncoded

@@ -78,7 +78,7 @@ fun FoodListScreen(navController: NavHostController) {
                             )
                         },
                         onRemoveFromCart = {
-                            // foodListViewmodel.deleteFoodFromCart(food.yemek_id.toInt(),"enes")
+                             foodListViewmodel.deleteFoodFromCart(food.yemek_id.toInt(),"enes")
                         },
                         onClick = {
                             val foodJson = Gson().toJson(food)
@@ -139,7 +139,21 @@ fun FoodItemCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (count > 0) {
+                if (count == 1) {
+                    IconButton(
+                        modifier = Modifier.size(36.dp), // Set fixed size for the button
+                        onClick = {
+                            count--
+                            onRemoveFromCart(food) // Call the API to remove the item
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_delete),
+                            contentDescription = "icon remove"
+                        )
+                    }
+                }
+                else if(count > 0){
                     IconButton(
                         modifier = Modifier.size(36.dp), // Set fixed size for the button
                         onClick = {
@@ -152,7 +166,8 @@ fun FoodItemCard(
                             contentDescription = "icon remove"
                         )
                     }
-                } else {
+                }
+                else {
                     Spacer(modifier = Modifier.size(36.dp)) // Reserve space when "-" button is not visible
                 }
 

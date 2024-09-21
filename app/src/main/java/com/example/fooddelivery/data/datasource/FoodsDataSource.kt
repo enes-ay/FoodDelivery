@@ -21,6 +21,6 @@ class FoodsDataSource(var foodsDao: FoodsDao) {
         foodsDao.deleteFood(sepet_yemek_id, kullanici_adi)
     }
     suspend fun getFoodsInCart(kullanici_adi: String) :  List<SepetYemekler> = withContext(Dispatchers.IO){
-        return@withContext foodsDao.getFoodsInCart(kullanici_adi).sepet_yemekler
+        return@withContext foodsDao.getFoodsInCart(kullanici_adi).body()?.sepet_yemekler ?: listOf()
     }
 }
