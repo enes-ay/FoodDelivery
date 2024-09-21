@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -59,7 +62,6 @@ fun CartScreen(modifier: Modifier = Modifier, navController: NavHostController) 
     val groupedFoods = cartFoods.groupBy { it.yemek_adi }
         .mapValues { entry -> entry.value.sumOf { it.yemek_siparis_adet } }
 
-    // Calculate total price
     val totalPrice = cartFoods.sumOf { it.yemek_fiyat * it.yemek_siparis_adet }
 
     LaunchedEffect(true) {
@@ -71,12 +73,17 @@ fun CartScreen(modifier: Modifier = Modifier, navController: NavHostController) 
         topBar = { TopAppBar(title = { Text(text = "Cart") }) },
         bottomBar = { BottomBar(navController = navController) }
     ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize()) {
-            // LazyColumn for scrolling items
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+        ) {
+
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
+                    .weight(4f)
+                    .fillMaxWidth()
             ) {
                 items(groupedFoods.keys.toList()) { yemekAdi ->
                     val siparisAdet = groupedFoods[yemekAdi] ?: 0
@@ -86,40 +93,50 @@ fun CartScreen(modifier: Modifier = Modifier, navController: NavHostController) 
                         food = food.copy(yemek_siparis_adet = siparisAdet),
                         onClick = { Log.e("cart", "test") },
                         onDelete = {
-                            cartViewmodel.deleteFoodFromCart(food.sepet_yemek_id, food.kullanici_adi)
+                            cartViewmodel.deleteFoodFromCart(
+                                food.sepet_yemek_id,
+                                food.kullanici_adi
+                            )
                         },
                         onAddToCart = {
-                            cartViewmodel.addFoodToCart(food.yemek_adi, food.yemek_resim_adi, food.yemek_fiyat,
-                                food.yemek_siparis_adet, food.kullanici_adi)
+                            cartViewmodel.addFoodToCart(
+                                food.yemek_adi, food.yemek_resim_adi, food.yemek_fiyat,
+                                food.yemek_siparis_adet, food.kullanici_adi
+                            )
                         }
                     )
                 }
             }
 
             // Fixed bottom section
-            Column(
+            Row(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.background)
-                    .padding(16.dp)
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
+                // Confirm Cart Button
+                Button(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .defaultMinSize(minWidth = 200.dp) // Butonun minimum genişliği sabit
+                        .padding(end = 10.dp), // Sağdan biraz boşluk bırakıyoruz
+                    onClick = { /* Confirm Cart action */ },
+                    shape = RectangleShape
                 ) {
-                    Button(onClick = { /* Confirm Cart action */ }) {
-                        Text(text = "Confirm Cart")
-                    }
                     Text(
-                        text = "Total: $${totalPrice}",
-                        style = MaterialTheme.typography.h4,
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        text = "Confirm Cart",
+                        color = Color.White,
+                        fontSize = 23.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
+                Text(
+                    text = "Total:  $${totalPrice}",
+                    style = MaterialTheme.typography.h5,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
             }
+
         }
     }
 }
@@ -140,7 +157,7 @@ fun CartItem(
     Row(modifier = Modifier
         .fillMaxWidth()
         .height(120.dp)
-        .padding(4.dp)
+        .padding(vertical = 4.dp, horizontal = 10.dp)
         .clickable { onClick }
         .border(2.dp, Color.Black)
     ) {
@@ -167,6 +184,7 @@ fun CartItem(
                 text = food.yemek_adi,
                 fontWeight = FontWeight.Bold,
                 fontSize = 22.sp,
+                textAlign = TextAlign.Center
             )
 
             Text(
@@ -201,7 +219,7 @@ fun CartItem(
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_delete),
-                                contentDescription = "icon remove"
+                                contentDescription = "icon delete"
                             )
                         }
                     }
