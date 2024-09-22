@@ -12,13 +12,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +35,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,60 +55,99 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun FoodListScreen(navController: NavHostController) {
     val foodListViewmodel: FoodListViewmodel = hiltViewModel()
-    val foodList by foodListViewmodel.foodList.observeAsState()
+    val foodList by foodListViewmodel.foodList.observeAsState() // Tüm yemekler
+    var searchQuery by remember { mutableStateOf("") } // Arama terimini saklar
+    val filteredFoodList = foodList?.filter { food ->
+        food.yemek_adi.contains(searchQuery, ignoreCase = true)
+    } ?: listOf() // Arama terimine göre filtreleme yapar
 
     LaunchedEffect(foodListViewmodel.foodList) {
         foodListViewmodel.getAllFoods()
     }
-    Scaffold(modifier = Modifier.fillMaxSize(),
-        topBar = { TopAppBar(title = { Text(text = "Food List") }) },
-        bottomBar = { BottomBar(navController = navController) }) { paddingValues ->
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            Column {
+                TopAppBar(title = { Text(text = "Food List") })
+                // Arama çubuğu ekleniyor
+                TextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    placeholder = { Text(text = "Search for food...") }, // Placeholder ekliyoruz
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search, // Sol tarafa arama ikonu ekliyoruz
+                            contentDescription = "Search Icon"
+                        )
+                    },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { searchQuery = "" }) { // Temizleme ikonu ekliyoruz
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Clear Search"
+                                )
+                            }
+                        }
+                    },
+                    singleLine = true, // Tek satırlık giriş
+                    shape = RoundedCornerShape(8.dp), // Köşeleri yuvarlatılmış
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant, // Arka plan rengi
+                        focusedIndicatorColor = Color.Transparent, // Focus durumunda kenarlık yok
+                        unfocusedIndicatorColor = Color.Transparent, // Kenarlık yok
+//                       // placeholderColor = Color.Gray // Placeholder rengi
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .shadow(4.dp, RoundedCornerShape(8.dp)) // Hafif bir gölge ekliyoruz
+                )
+
+            }
+        },
+        bottomBar = { BottomBar(navController = navController) }
+    ) { paddingValues ->
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
             columns = GridCells.Fixed(2)
         ) {
-            foodList?.let {
-
-                for (food in foodList!!) {
-                    println("food ${food.yemek_id} ${food.yemek_adi}")
-                }
-                items(it.count()) {
-                    val food = foodList!![it]
-                    FoodItemCard(food = food,
-                        onAddToCart = {
-                            foodListViewmodel.addFoodToCart(
-                                food.yemek_adi,
-                                food.yemek_resim_adi,
-                                food.yemek_fiyat,
-                                1,
-                                "enes"
-                            )
-                        },
-                        onRemoveFromCart = {
-                             foodListViewmodel.deleteFoodFromCart(food.yemek_id.toInt(),"enes")
-                        },
-                        onClick = {
-                            val foodJson = Gson().toJson(food)
-                            navController.navigate("foodDetail/$foodJson") {
-                                // Geri yığınını (back stack) temizlemek için başlangıç noktasına kadar tüm sayfaları kaldırıyoruz
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                // Aynı sayfaya birden fazla kez gitmeyi engelliyoruz
-                                launchSingleTop = true
-                                // Daha önce seçilen bir sayfayı yeniden seçerken durumu geri yüklemiyoruz
-                                restoreState = false
+            // Filtrelenmiş listeyi kullanarak öğeleri göster
+            items(filteredFoodList.count()) {
+                val food = filteredFoodList[it]
+                FoodItemCard(
+                    food = food,
+                    onAddToCart = {
+                        foodListViewmodel.addFoodToCart(
+                            food.yemek_adi,
+                            food.yemek_resim_adi,
+                            food.yemek_fiyat,
+                            1,
+                            "enes"
+                        )
+                    },
+                    onRemoveFromCart = {
+                        foodListViewmodel.deleteFoodFromCart(food.yemek_id.toInt(), "enes")
+                    },
+                    onClick = {
+                        val foodJson = Gson().toJson(food)
+                        navController.navigate("foodDetail/$foodJson") {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
                             }
-                        })
-                }
+                            launchSingleTop = true
+                            restoreState = false
+                        }
+                    }
+                )
             }
-
         }
-
     }
 }
+
 
 @Composable
 fun FoodItemCard(
