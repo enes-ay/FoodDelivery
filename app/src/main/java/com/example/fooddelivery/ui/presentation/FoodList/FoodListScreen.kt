@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.fooddelivery.BottomBar
 import com.example.fooddelivery.R
@@ -82,8 +83,16 @@ fun FoodListScreen(navController: NavHostController) {
                         },
                         onClick = {
                             val foodJson = Gson().toJson(food)
-                            navController.navigate("foodDetail/$foodJson")
-                            Log.e("item","clicked")
+                            navController.navigate("foodDetail/$foodJson") {
+                                // Geri yığınını (back stack) temizlemek için başlangıç noktasına kadar tüm sayfaları kaldırıyoruz
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                // Aynı sayfaya birden fazla kez gitmeyi engelliyoruz
+                                launchSingleTop = true
+                                // Daha önce seçilen bir sayfayı yeniden seçerken durumu geri yüklemiyoruz
+                                restoreState = false
+                            }
                         })
                 }
             }

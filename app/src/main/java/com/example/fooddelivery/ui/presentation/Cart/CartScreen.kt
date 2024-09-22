@@ -132,7 +132,7 @@ fun CartScreen(modifier: Modifier = Modifier, navController: NavHostController) 
                     )
                 }
                 Text(
-                    text = "Total:  $${totalPrice}",
+                    text = "Total:  ${totalPrice}₺",
                     style = MaterialTheme.typography.h5,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )

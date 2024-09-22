@@ -34,7 +34,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.fooddelivery.R
 import com.example.fooddelivery.data.model.SepetYemekler
 import com.example.fooddelivery.data.model.Yemekler
@@ -45,6 +47,7 @@ import com.skydoves.landscapist.glide.GlideImage
 fun FoodDetailScreen(navController: NavController, food: Yemekler) {
     var count by remember { mutableStateOf(0) }
     val totalPrice = count*food.yemek_fiyat
+    val foodDetailViewmodel : FoodDetailViewmodel = hiltViewModel()
 
 
     Scaffold (modifier = Modifier.fillMaxSize(),
@@ -135,7 +138,40 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
                     modifier = Modifier
                         .defaultMinSize(minWidth = 200.dp) // Butonun minimum genişliği sabit
                         .padding(end = 10.dp), // Sağdan biraz boşluk bırakıyoruz
-                    onClick = { /* Confirm Cart action */ },
+                    onClick = {
+                        if(count>0){
+                            foodDetailViewmodel.addFoodToCart(food.yemek_adi,food.yemek_resim_adi, food.yemek_fiyat, count, "enes" )
+                            navController.navigate("cart") {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
+                                // on the back stack as users select items
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                // Avoid multiple copies of the same destination when
+                                // reselecting the same item
+                                launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
+                                restoreState = true
+                            }
+                        }
+                        else{
+                            navController.navigate("cart") {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
+                                // on the back stack as users select items
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                // Avoid multiple copies of the same destination when
+                                // reselecting the same item
+                                launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
+                                restoreState = true
+                            }
+                        }
+
+                    },
                     shape = RectangleShape
                 ) {
                     Text(
