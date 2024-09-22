@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -154,112 +157,121 @@ fun CartItem(
 
 ) {
     var count by remember { mutableStateOf(food.yemek_siparis_adet) }
-
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .height(120.dp)
-        .padding(vertical = 4.dp, horizontal = 10.dp)
-        .clickable { onClick }
-        .border(2.dp, Color.Black)
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp) // Add padding around the card
+            .clickable { onClick() }
+            .shadow(8.dp, RoundedCornerShape(16.dp)), // Add shadow and round corners
+        shape = RoundedCornerShape(16.dp), // Rounded corners
+        // elevation = 8.dp, // Elevation for the card shadow
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp)
+            .padding(vertical = 4.dp, horizontal = 10.dp)
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1.5f)
+            ) {
 
-            GlideImage(modifier = Modifier.size(190.dp),
-                imageModel = "http://kasimadalan.pe.hu/yemekler/resimler/${food.yemek_resim_adi}",
-                contentScale = ContentScale.Crop,
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1.5f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround
-        ) {
+                GlideImage(modifier = Modifier.size(160.dp).weight(1f),
+                    imageModel = "http://kasimadalan.pe.hu/yemekler/resimler/${food.yemek_resim_adi}",
+                    contentScale = ContentScale.Crop,
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1.5f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceAround
+            ) {
 
-            Text(
-                text = food.yemek_adi,
-                fontWeight = FontWeight.Bold,
-                fontSize = 22.sp,
-                textAlign = TextAlign.Center
-            )
+                Text(
+                    text = food.yemek_adi,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    textAlign = TextAlign.Center
+                )
 
-            Text(
-                text = "${food.yemek_fiyat}₺",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(2f),
-            horizontalAlignment = Alignment.End
-        ) {
-
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
+                Text(
+                    text = "${food.yemek_fiyat}₺",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(2f),
+                horizontalAlignment = Alignment.End
             ) {
 
                 Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (count==1){
-                        IconButton(
-                            modifier = Modifier.size(36.dp), // Set fixed size for the button
-                            onClick = {
-                                count--
-                                onDelete()
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_delete),
-                                contentDescription = "icon delete"
-                            )
-                        }
-                    }
-                   else if (count > 0) {
-                        IconButton(
-                            modifier = Modifier.size(36.dp), // Set fixed size for the button
-                            onClick = {
-                                count--
-                               onDelete()
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_remove_circle),
-                                contentDescription = "icon remove"
-                            )
-                        }
-                    } else {
-                        Spacer(modifier = Modifier.size(36.dp)) // Reserve space when "-" button is not visible
-                    }
 
-                    if (count > 0) {
-                        androidx.compose.material3.Text(
-                            text = "$count",
-                            fontSize = 22.sp,
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                    }
-
-                    IconButton(
-                        modifier = Modifier.size(36.dp),
-                        onClick = {
-                            count++
-                            onAddToCart()
-                        }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(Icons.Default.AddCircle, contentDescription = "Increase Button")
+                        if (count==1){
+                            IconButton(
+                                modifier = Modifier.size(36.dp), // Set fixed size for the button
+                                onClick = {
+                                    count--
+                                    onDelete()
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_delete),
+                                    contentDescription = "icon delete"
+                                )
+                            }
+                        }
+                        else if (count > 0) {
+                            IconButton(
+                                modifier = Modifier.size(36.dp), // Set fixed size for the button
+                                onClick = {
+                                    count--
+                                    onDelete()
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_remove_circle),
+                                    contentDescription = "icon remove"
+                                )
+                            }
+                        } else {
+                            Spacer(modifier = Modifier.size(36.dp)) // Reserve space when "-" button is not visible
+                        }
+
+                        if (count > 0) {
+                            androidx.compose.material3.Text(
+                                text = "$count",
+                                fontSize = 22.sp,
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            )
+                        }
+
+                        IconButton(
+                            modifier = Modifier.size(36.dp),
+                            onClick = {
+                                count++
+                                onAddToCart()
+                            }
+                        ) {
+                            Icon(Icons.Default.AddCircle, contentDescription = "Increase Button")
+                        }
                     }
                 }
             }
         }
     }
+
+
 }

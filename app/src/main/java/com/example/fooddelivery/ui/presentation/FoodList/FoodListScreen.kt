@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +20,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,8 +42,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -60,6 +70,8 @@ fun FoodListScreen(navController: NavHostController) {
     val filteredFoodList = foodList?.filter { food ->
         food.yemek_adi.contains(searchQuery, ignoreCase = true)
     } ?: listOf() // Arama terimine göre filtreleme yapar
+    val focusManager = LocalFocusManager.current
+
 
     LaunchedEffect(foodListViewmodel.foodList) {
         foodListViewmodel.getAllFoods()
@@ -83,7 +95,10 @@ fun FoodListScreen(navController: NavHostController) {
                     },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { searchQuery = "" }) { // Temizleme ikonu ekliyoruz
+                            IconButton(onClick = {
+                                searchQuery = ""
+                                focusManager.clearFocus()
+                            }) { // Temizleme ikonu ekliyoruz
                                 Icon(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = "Clear Search"
@@ -97,7 +112,7 @@ fun FoodListScreen(navController: NavHostController) {
                         containerColor = MaterialTheme.colorScheme.surfaceVariant, // Arka plan rengi
                         focusedIndicatorColor = Color.Transparent, // Focus durumunda kenarlık yok
                         unfocusedIndicatorColor = Color.Transparent, // Kenarlık yok
-//                       // placeholderColor = Color.Gray // Placeholder rengi
+                        // placeholderColor = Color.Gray // Placeholder rengi
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -159,91 +174,123 @@ fun FoodItemCard(
 ) {
     var count by remember { mutableStateOf(initialCount) }
 
-    Column(
+    Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            },
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth().height(280.dp)
+            .padding(12.dp) // Add padding around the card
+            .clickable { onClick() }
+            .shadow(8.dp, RoundedCornerShape(16.dp)), // Add shadow and round corners
+        shape = RoundedCornerShape(16.dp), // Rounded corners
+       // elevation = 8.dp, // Elevation for the card shadow
     ) {
-        // Image using Glide
-        GlideImage(
-            modifier = Modifier.size(120.dp),
-            imageModel = "${Constants.IMAGE_BASE_URL}${food.yemek_resim_adi}",
-            contentDescription = "${food.yemek_adi} image"
-        )
 
-        // Food info (name and price)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(text = food.yemek_adi, fontSize = 22.sp)
-        }
-
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 15.dp), // Add padding to avoid edge overlap
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween // Ensure equal spacing
+                .clickable {
+                    onClick()
+                },
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "${food.yemek_fiyat}₺", fontSize = 22.sp)
+            // Image using Glide
+            GlideImage(
+                modifier = Modifier.size(120.dp),
+                imageModel = "${Constants.IMAGE_BASE_URL}${food.yemek_resim_adi}",
+                contentDescription = "${food.yemek_adi} image"
+            )
 
+            // Food info (name and price)
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                if (count == 1) {
-                    IconButton(
-                        modifier = Modifier.size(36.dp), // Set fixed size for the button
-                        onClick = {
-                            count--
-                            onRemoveFromCart(food) // Call the API to remove the item
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_delete),
-                            contentDescription = "icon remove"
-                        )
-                    }
-                }
-                else if(count > 0){
-                    IconButton(
-                        modifier = Modifier.size(36.dp), // Set fixed size for the button
-                        onClick = {
-                            count--
-                            onRemoveFromCart(food) // Call the API to remove the item
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_remove_circle),
-                            contentDescription = "icon remove"
-                        )
-                    }
-                }
-                else {
-                    Spacer(modifier = Modifier.size(36.dp)) // Reserve space when "-" button is not visible
-                }
+                Text(text = food.yemek_adi, fontSize = 22.sp)
+            }
 
-                if (count > 0) {
-                    Text(
-                        text = "$count",
-                        fontSize = 22.sp,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = 20.dp,
+                        vertical = 5.dp
+                    ), // Add padding to avoid edge overlap
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween // Ensure equal spacing
+            ) {
+                Text(text = "${food.yemek_fiyat}₺", fontSize = 23.sp)
 
-                IconButton(
-                    modifier = Modifier.size(36.dp),
-                    onClick = {
-                        count++
-                        onAddToCart(food) // Call the API to add the item
-                    }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 5.dp), // Sağ-sol kenarlardan boşluk bırakıyoruz
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center // Tüm içeriği ortalayacağız
                 ) {
-                    Icon(Icons.Default.AddCircle, contentDescription = "Increase Buttonb")
+                    if (count == 0) {
+                        // "Sepete Ekle" butonu
+                        Button(
+                            onClick = {
+                                count++
+                                onAddToCart(food) // Ürünü sepete ekle
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth()
+                                .padding(top = 8.dp), // Sabit yükseklik
+                            shape = RoundedCornerShape(4.dp), // Yuvarlak köşeler
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary, // Tema rengine göre arka plan
+                                contentColor = Color.White // Beyaz yazı rengi
+                            )
+                        ) {
+                            Text(text = "Sepete Ekle", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                        }
+                    } else {
+                        // "-" butonu, sayacı ve "+" butonu
+                        IconButton(
+                            modifier = Modifier.size(43.dp).padding(top = 14.dp), // Sabit boyut
+                            onClick = {
+                                count--
+                                onRemoveFromCart(food) // Ürünü sepetten çıkar
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(
+                                    id = if (count == 1) R.drawable.ic_delete else R.drawable.ic_remove_circle
+                                ),
+                                contentDescription = "icon remove",
+                                tint = MaterialTheme.colorScheme.error // Kaldırma butonu için hata rengi
+                            )
+                        }
+
+                        // Miktar gösterimi
+                        Text(
+                            modifier = Modifier.padding(horizontal = 13.dp).padding(top = 14.dp),
+                            text = "$count",
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Center
+                        )
+
+                        // "+" butonu
+                        IconButton(
+                            modifier = Modifier.size(43.dp).padding(top = 14.dp),
+                            onClick = {
+                                count++
+                                onAddToCart(food) // Ürünü sepete ekle
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.AddCircle,
+                                contentDescription = "Increase Button",
+                                tint = MaterialTheme.colorScheme.primary // Ekleme butonu için tema rengi
+                            )
+                        }
+                    }
                 }
+
+
             }
         }
     }
