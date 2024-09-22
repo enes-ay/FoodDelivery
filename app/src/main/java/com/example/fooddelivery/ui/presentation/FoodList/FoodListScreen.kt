@@ -244,7 +244,7 @@ fun FoodItemCard(
                                 contentColor = Color.White // Beyaz yazı rengi
                             )
                         ) {
-                            Text(text = "Sepete Ekle", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                            Text(text = "Add to cart", fontSize = 15.sp, fontWeight = FontWeight.Bold)
                         }
                     } else {
                         // "-" butonu, sayacı ve "+" butonu
