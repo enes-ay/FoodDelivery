@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
@@ -43,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -71,7 +73,8 @@ fun FoodListScreen(navController: NavHostController) {
         food.yemek_adi.contains(searchQuery, ignoreCase = true)
     } ?: listOf() // Arama terimine göre filtreleme yapar
     val focusManager = LocalFocusManager.current
-
+    var isSearching by remember { mutableStateOf(false) } // Arama durumunu tutuyoruz
+    var isFocused by remember { mutableStateOf(false) }
 
     LaunchedEffect(foodListViewmodel.foodList) {
         foodListViewmodel.getAllFoods()
@@ -87,16 +90,28 @@ fun FoodListScreen(navController: NavHostController) {
                     onValueChange = { searchQuery = it },
                     placeholder = { Text(text = "Search for food...") },
                     leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search Icon"
-                        )
+                        if (isFocused) {
+                            IconButton(onClick = {
+                                searchQuery = ""
+                                focusManager.clearFocus() // Focusu temizleyerek aramadan çık
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack, // Geri oku göster
+                                    contentDescription = "Back Icon"
+                                )
+                            }
+                        }
+                      else{
+                            Icon(
+                                imageVector = Icons.Default.Search, // Arama ikonunu göster
+                                contentDescription = "Search Icon"
+                            )
+                        }
                     },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
                             IconButton(onClick = {
                                 searchQuery = ""
-                                focusManager.clearFocus()
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.Close,
@@ -117,6 +132,9 @@ fun FoodListScreen(navController: NavHostController) {
                         .fillMaxWidth()
                         .padding(8.dp)
                         .shadow(4.dp, RoundedCornerShape(8.dp))
+                        .onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused // Focus durumunu takip et
+                    }
                 )
 
             }
