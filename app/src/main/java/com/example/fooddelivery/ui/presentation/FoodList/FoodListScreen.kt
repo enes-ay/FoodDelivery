@@ -82,14 +82,13 @@ fun FoodListScreen(navController: NavHostController) {
         topBar = {
             Column {
                 TopAppBar(title = { Text(text = "Food List") })
-                // Arama çubuğu ekleniyor
                 TextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    placeholder = { Text(text = "Search for food...") }, // Placeholder ekliyoruz
+                    placeholder = { Text(text = "Search for food...") },
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Default.Search, // Sol tarafa arama ikonu ekliyoruz
+                            imageVector = Icons.Default.Search,
                             contentDescription = "Search Icon"
                         )
                     },
@@ -98,7 +97,7 @@ fun FoodListScreen(navController: NavHostController) {
                             IconButton(onClick = {
                                 searchQuery = ""
                                 focusManager.clearFocus()
-                            }) { // Temizleme ikonu ekliyoruz
+                            }) {
                                 Icon(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = "Clear Search"
@@ -109,15 +108,15 @@ fun FoodListScreen(navController: NavHostController) {
                     singleLine = true, // Tek satırlık giriş
                     shape = RoundedCornerShape(8.dp), // Köşeleri yuvarlatılmış
                     colors = TextFieldDefaults.textFieldColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant, // Arka plan rengi
-                        focusedIndicatorColor = Color.Transparent, // Focus durumunda kenarlık yok
-                        unfocusedIndicatorColor = Color.Transparent, // Kenarlık yok
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
                         // placeholderColor = Color.Gray // Placeholder rengi
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .shadow(4.dp, RoundedCornerShape(8.dp)) // Hafif bir gölge ekliyoruz
+                        .shadow(4.dp, RoundedCornerShape(8.dp))
                 )
 
             }
@@ -145,7 +144,7 @@ fun FoodListScreen(navController: NavHostController) {
                         )
                     },
                     onRemoveFromCart = {
-                        foodListViewmodel.deleteFoodFromCart(food.yemek_id.toInt(), "enes")
+                        foodListViewmodel.deleteFoodFromCart(food.yemek_id, "enes")
                     },
                     onClick = {
                         val foodJson = Gson().toJson(food)
@@ -167,8 +166,8 @@ fun FoodListScreen(navController: NavHostController) {
 @Composable
 fun FoodItemCard(
     food: Yemekler,
-    initialCount: Int = 0, // Use this to initialize the count, maybe fetched from the cart
-    onAddToCart: (Yemekler) -> Unit,
+    initialCount: Int = 0,
+    onAddToCart: () -> Unit,
     onRemoveFromCart: (Yemekler) -> Unit,
     onClick: () -> Unit
 ) {
@@ -176,12 +175,13 @@ fun FoodItemCard(
 
     Card(
         modifier = Modifier
-            .fillMaxWidth().height(280.dp)
-            .padding(12.dp) // Add padding around the card
+            .fillMaxWidth()
+            .height(280.dp)
+            .padding(12.dp)
             .clickable { onClick() }
-            .shadow(8.dp, RoundedCornerShape(16.dp)), // Add shadow and round corners
-        shape = RoundedCornerShape(16.dp), // Rounded corners
-       // elevation = 8.dp, // Elevation for the card shadow
+            .shadow(8.dp, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
+        // elevation = 8.dp, // Elevation for the card shadow
     ) {
 
         Column(
@@ -214,7 +214,7 @@ fun FoodItemCard(
                     .padding(
                         horizontal = 20.dp,
                         vertical = 5.dp
-                    ), // Add padding to avoid edge overlap
+                    ), // "Add" padding to avoid edge overlap
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween // Ensure equal spacing
             ) {
@@ -223,33 +223,37 @@ fun FoodItemCard(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 5.dp), // Sağ-sol kenarlardan boşluk bırakıyoruz
+                        .padding(horizontal = 5.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center // Tüm içeriği ortalayacağız
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     if (count == 0) {
-                        // "Sepete Ekle" butonu
                         Button(
                             onClick = {
                                 count++
-                                onAddToCart(food) // Ürünü sepete ekle
+                                onAddToCart()
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentWidth()
-                                .padding(top = 8.dp), // Sabit yükseklik
-                            shape = RoundedCornerShape(4.dp), // Yuvarlak köşeler
+                                .padding(top = 8.dp),
+                            shape = RoundedCornerShape(4.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary, // Tema rengine göre arka plan
-                                contentColor = Color.White // Beyaz yazı rengi
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = Color.White
                             )
                         ) {
-                            Text(text = "Add to cart", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                            Text(
+                                text = "Add to cart",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     } else {
-                        // "-" butonu, sayacı ve "+" butonu
                         IconButton(
-                            modifier = Modifier.size(43.dp).padding(top = 14.dp), // Sabit boyut
+                            modifier = Modifier
+                                .size(43.dp)
+                                .padding(top = 14.dp), // Sabit boyut
                             onClick = {
                                 count--
                                 onRemoveFromCart(food) // Ürünü sepetten çıkar
@@ -263,22 +267,22 @@ fun FoodItemCard(
                                 tint = MaterialTheme.colorScheme.error // Kaldırma butonu için hata rengi
                             )
                         }
-
-                        // Miktar gösterimi
                         Text(
-                            modifier = Modifier.padding(horizontal = 13.dp).padding(top = 14.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 13.dp)
+                                .padding(top = 14.dp),
                             text = "$count",
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Medium,
                             textAlign = TextAlign.Center
                         )
-
-                        // "+" butonu
                         IconButton(
-                            modifier = Modifier.size(43.dp).padding(top = 14.dp),
+                            modifier = Modifier
+                                .size(43.dp)
+                                .padding(top = 14.dp),
                             onClick = {
                                 count++
-                                onAddToCart(food) // Ürünü sepete ekle
+                                onAddToCart()
                             }
                         ) {
                             Icon(

@@ -55,6 +55,7 @@ import androidx.navigation.NavHostController
 import com.example.fooddelivery.BottomBar
 import com.example.fooddelivery.R
 import com.example.fooddelivery.data.model.SepetYemekler
+import com.google.gson.Gson
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,7 +96,12 @@ fun CartScreen(modifier: Modifier = Modifier, navController: NavHostController) 
 
                     CartItem(
                         food = food.copy(yemek_siparis_adet = siparisAdet),
-                        onClick = { Log.e("cart", "test") },
+                        onClick = {
+                            var foodJson = Gson().toJson(food)
+                            navController.navigate("foodDetail/$foodJson"){
+                                popUpTo("cart")
+                            }
+                        },
                         onDelete = {
                             cartViewmodel.deleteFoodFromCart(
                                 food.sepet_yemek_id,

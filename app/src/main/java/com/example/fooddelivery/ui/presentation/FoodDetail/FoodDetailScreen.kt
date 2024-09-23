@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +35,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -77,53 +81,63 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
                   .padding(top = 20.dp),
                   horizontalArrangement = Arrangement.Center,
                   verticalAlignment = Alignment.CenterVertically) {
-                  if (count==1){
-                      IconButton(
-                          modifier = Modifier.size(36.dp), // Set fixed size for the button
+                  if (count == 0) {
+                      // "Sepete Ekle" butonu
+                      Button(
                           onClick = {
-                              count--
-                              // onDelete()
-                          }
-                      ) {
-                          Icon(
-                              painter = painterResource(id = R.drawable.ic_delete),
-                              contentDescription = "icon delete"
+                              count++
+                          },
+                          modifier = Modifier
+                              .fillMaxWidth()
+                              .wrapContentWidth()
+                              .padding(top = 8.dp), // Sabit yükseklik
+                          shape = RoundedCornerShape(4.dp), // Yuvarlak köşeler
+                          colors = ButtonDefaults.buttonColors(
+                              containerColor = androidx.compose.material3.MaterialTheme.colorScheme.primary, // Tema rengine göre arka plan
+                              contentColor = Color.White // Beyaz yazı rengi
                           )
-                      }
-                  }
-                  else if (count > 0) {
-                      IconButton(
-                          modifier = Modifier.size(36.dp), // Set fixed size for the button
-                          onClick = {
-                              count--
-                              // onDelete()
-                          }
                       ) {
-                          Icon(
-                              painter = painterResource(id = R.drawable.ic_remove_circle),
-                              contentDescription = "icon remove"
-                          )
+                          Text(text = "Add to cart", fontSize = 15.sp, fontWeight = FontWeight.Bold)
                       }
                   } else {
-                      Spacer(modifier = Modifier.size(36.dp)) // Reserve space when "-" button is not visible
-                  }
-
-                  if (count > 0) {
-                      Text(
-                          text = "$count",
-                          fontSize = 22.sp,
-                          modifier = Modifier.padding(horizontal = 16.dp)
-                      )
-                  }
-
-                  IconButton(
-                      modifier = Modifier.size(36.dp),
-                      onClick = {
-                          count++
-                          //  onAddToCart()
+                      // "-" butonu, sayacı ve "+" butonu
+                      IconButton(
+                          modifier = Modifier.size(43.dp).padding(top = 14.dp), // Sabit boyut
+                          onClick = {
+                              count--
+                          }
+                      ) {
+                          Icon(
+                              painter = painterResource(
+                                  id = if (count == 1) R.drawable.ic_delete else R.drawable.ic_remove_circle
+                              ),
+                              contentDescription = "icon remove",
+                              tint = androidx.compose.material3.MaterialTheme.colorScheme.error // Kaldırma butonu için hata rengi
+                          )
                       }
-                  ) {
-                      Icon(Icons.Default.AddCircle, contentDescription = "Increase Button")
+
+                      // Miktar gösterimi
+                      Text(
+                          modifier = Modifier.padding(horizontal = 13.dp).padding(top = 14.dp),
+                          text = "$count",
+                          fontSize = 25.sp,
+                          fontWeight = FontWeight.Medium,
+                          textAlign = TextAlign.Center
+                      )
+
+                      // "+" butonu
+                      IconButton(
+                          modifier = Modifier.size(43.dp).padding(top = 14.dp),
+                          onClick = {
+                              count++
+                          }
+                      ) {
+                          Icon(
+                              Icons.Default.AddCircle,
+                              contentDescription = "Increase Button",
+                              tint = androidx.compose.material3.MaterialTheme.colorScheme.primary // Ekleme butonu için tema rengi
+                          )
+                      }
                   }
               }
           }
@@ -141,33 +155,11 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
                     onClick = {
                         if(count>0){
                             foodDetailViewmodel.addFoodToCart(food.yemek_adi,food.yemek_resim_adi, food.yemek_fiyat, count, "enes" )
-                            navController.navigate("cart") {
-                                // Pop up to the start destination of the graph to
-                                // avoid building up a large stack of destinations
-                                // on the back stack as users select items
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                // Avoid multiple copies of the same destination when
-                                // reselecting the same item
-                                launchSingleTop = true
-                                // Restore state when reselecting a previously selected item
-                                restoreState = true
-                            }
+                            navController.navigate("cart")
                         }
                         else{
-                            navController.navigate("cart") {
-                                // Pop up to the start destination of the graph to
-                                // avoid building up a large stack of destinations
-                                // on the back stack as users select items
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                // Avoid multiple copies of the same destination when
-                                // reselecting the same item
-                                launchSingleTop = true
-                                // Restore state when reselecting a previously selected item
-                                restoreState = true
+                            navController.navigate("cart"){
+                                popUpTo("cart")
                             }
                         }
 
