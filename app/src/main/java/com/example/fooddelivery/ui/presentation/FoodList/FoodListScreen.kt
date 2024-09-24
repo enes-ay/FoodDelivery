@@ -3,6 +3,7 @@ package com.example.fooddelivery.ui.presentation.FoodList
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +21,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -174,6 +177,10 @@ fun FoodListScreen(navController: NavHostController) {
                             restoreState = false
                         }
                     }
+                    ,
+                    onFavoriteClick = {
+
+                    }
                 )
             }
         }
@@ -187,134 +194,149 @@ fun FoodItemCard(
     initialCount: Int = 0,
     onAddToCart: () -> Unit,
     onRemoveFromCart: (Yemekler) -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onFavoriteClick: (Yemekler) -> Unit // New callback for favorite button
 ) {
     var count by remember { mutableStateOf(initialCount) }
+    var isFavorite by remember { mutableStateOf(false) } // Track if the item is favorited
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(280.dp)
-            .padding(12.dp)
+            .height(260.dp)
+            .padding(10.dp)
             .clickable { onClick() }
             .shadow(8.dp, RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(16.dp),
-        // elevation = 8.dp, // Elevation for the card shadow
     ) {
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onClick()
-                },
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Image using Glide
-            GlideImage(
-                modifier = Modifier.size(120.dp),
-                imageModel = "${Constants.IMAGE_BASE_URL}${food.yemek_resim_adi}",
-                contentDescription = "${food.yemek_adi} image"
-            )
-
-            // Food info (name and price)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(text = food.yemek_adi, fontSize = 22.sp)
-            }
-
+        Box {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        horizontal = 20.dp,
-                        vertical = 5.dp
-                    ), // "Add" padding to avoid edge overlap
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween // Ensure equal spacing
+                    .clickable {
+                        onClick()
+                    },
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "${food.yemek_fiyat}₺", fontSize = 23.sp)
+                // Image using Glide
+                GlideImage(
+                    modifier = Modifier.size(120.dp),
+                    imageModel = "${Constants.IMAGE_BASE_URL}${food.yemek_resim_adi}",
+                    contentDescription = "${food.yemek_adi} image"
+                )
 
+                // Food info (name and price)
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 5.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    if (count == 0) {
-                        Button(
-                            onClick = {
-                                count++
-                                onAddToCart()
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentWidth()
-                                .padding(top = 8.dp),
-                            shape = RoundedCornerShape(4.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = Color.White
-                            )
-                        ) {
+                    Text(text = food.yemek_adi, fontSize = 22.sp)
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 5.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = "${food.yemek_fiyat}₺", fontSize = 23.sp)
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 5.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        if (count == 0) {
+                            Button(
+                                onClick = {
+                                    count++
+                                    onAddToCart()
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentWidth()
+                                    .padding(top = 8.dp),
+                                shape = RoundedCornerShape(4.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    contentColor = Color.White
+                                )
+                            ) {
+                                Text(
+                                    text = "Add to cart",
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        } else {
+                            IconButton(
+                                modifier = Modifier
+                                    .size(43.dp)
+                                    .padding(top = 14.dp),
+                                onClick = {
+                                    count--
+                                    onRemoveFromCart(food)
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(
+                                        id = if (count == 1) R.drawable.ic_delete else R.drawable.ic_remove_circle
+                                    ),
+                                    contentDescription = "Remove",
+                                    tint = MaterialTheme.colorScheme.error
+                                )
+                            }
                             Text(
-                                text = "Add to cart",
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold
+                                modifier = Modifier
+                                    .padding(horizontal = 13.dp)
+                                    .padding(top = 14.dp),
+                                text = "$count",
+                                fontSize = 25.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
                             )
-                        }
-                    } else {
-                        IconButton(
-                            modifier = Modifier
-                                .size(43.dp)
-                                .padding(top = 14.dp), // Sabit boyut
-                            onClick = {
-                                count--
-                                onRemoveFromCart(food) // Ürünü sepetten çıkar
+                            IconButton(
+                                modifier = Modifier
+                                    .size(43.dp)
+                                    .padding(top = 14.dp),
+                                onClick = {
+                                    count++
+                                    onAddToCart()
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Default.AddCircle,
+                                    contentDescription = "Increase",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
                             }
-                        ) {
-                            Icon(
-                                painter = painterResource(
-                                    id = if (count == 1) R.drawable.ic_delete else R.drawable.ic_remove_circle
-                                ),
-                                contentDescription = "icon remove",
-                                tint = MaterialTheme.colorScheme.error // Kaldırma butonu için hata rengi
-                            )
-                        }
-                        Text(
-                            modifier = Modifier
-                                .padding(horizontal = 13.dp)
-                                .padding(top = 14.dp),
-                            text = "$count",
-                            fontSize = 25.sp,
-                            fontWeight = FontWeight.Medium,
-                            textAlign = TextAlign.Center
-                        )
-                        IconButton(
-                            modifier = Modifier
-                                .size(43.dp)
-                                .padding(top = 14.dp),
-                            onClick = {
-                                count++
-                                onAddToCart()
-                            }
-                        ) {
-                            Icon(
-                                Icons.Default.AddCircle,
-                                contentDescription = "Increase Button",
-                                tint = MaterialTheme.colorScheme.primary // Ekleme butonu için tema rengi
-                            )
                         }
                     }
                 }
+            }
 
-
+            // Favorite button at the top-right corner of the card
+            IconButton(
+                onClick = {
+                    isFavorite = !isFavorite // Toggle favorite state
+                    onFavoriteClick(food) // Call the favorite callback
+                },
+                modifier = Modifier
+                    .align(Alignment.TopEnd) // Align the button to the top-right corner
+            ) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = "Favorite button",
+                    tint = if (isFavorite) Color.Black else Color.Gray
+                )
             }
         }
     }
 }
+
 
