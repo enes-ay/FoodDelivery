@@ -2,13 +2,14 @@ package com.example.fooddelivery.data.datasource
 
 import androidx.lifecycle.MutableLiveData
 import com.example.fooddelivery.data.model.Yemekler
+import com.example.fooddelivery.data.model.YemeklerFirebase
 import com.google.firebase.firestore.CollectionReference
 
 class FirebaseFavDataSource (val collectionFavFoods: CollectionReference) {
 
-    var favFoodsList = MutableLiveData<List<Yemekler>>()
+    var favFoodsList = MutableLiveData<List<YemeklerFirebase>>()
 
-    fun saveFavFood(yemekAdi : String, yemekFiyat: Int, yemekId: Int, yemekResimAdi: String){
+    fun saveFavFood(yemekAdi : String, yemekFiyat: Int, yemekId: String, yemekResimAdi: String){
         val newFood = Yemekler(yemekAdi, yemekFiyat, yemekId, yemekResimAdi)
         collectionFavFoods.document().set(newFood)
     }
@@ -17,15 +18,15 @@ class FirebaseFavDataSource (val collectionFavFoods: CollectionReference) {
         collectionFavFoods.document(yemekId).delete()
     }
 
-    fun getFavFoods() : MutableLiveData<List<Yemekler>>{
+    fun getFavFoods() : MutableLiveData<List<YemeklerFirebase>>{
         collectionFavFoods.addSnapshotListener { value, error ->
             if(value!=null){
-                val favList = ArrayList<Yemekler>()
+                val favList = ArrayList<YemeklerFirebase>()
 
                 for (d in value.documents){
-                    val food = d.toObject(Yemekler::class.java)
+                    val food = d.toObject(YemeklerFirebase::class.java)
                     if(food!=null){
-                        food.yemek_id = d.id.toInt()
+                        food.yemek_id = d.id
                         favList.add(food)
                     }
                 }

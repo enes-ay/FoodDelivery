@@ -62,6 +62,7 @@ import androidx.navigation.NavHostController
 import com.example.fooddelivery.BottomBar
 import com.example.fooddelivery.R
 import com.example.fooddelivery.data.model.Yemekler
+import com.example.fooddelivery.ui.presentation.Favorites.FavoritesViewmodel
 import com.example.fooddelivery.utils.Constants
 import com.google.gson.Gson
 import com.skydoves.landscapist.glide.GlideImage
@@ -70,13 +71,13 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun FoodListScreen(navController: NavHostController) {
     val foodListViewmodel: FoodListViewmodel = hiltViewModel()
+    val foodFavoritesViewmodel: FavoritesViewmodel = hiltViewModel()
     val foodList by foodListViewmodel.foodList.observeAsState() // Tüm yemekler
     var searchQuery by remember { mutableStateOf("") } // Arama terimini saklar
     val filteredFoodList = foodList?.filter { food ->
         food.yemek_adi.contains(searchQuery, ignoreCase = true)
     } ?: listOf() // Arama terimine göre filtreleme yapar
     val focusManager = LocalFocusManager.current
-    var isSearching by remember { mutableStateOf(false) } // Arama durumunu tutuyoruz
     var isFocused by remember { mutableStateOf(false) }
 
     LaunchedEffect(foodListViewmodel.foodList) {
@@ -165,7 +166,7 @@ fun FoodListScreen(navController: NavHostController) {
                         )
                     },
                     onRemoveFromCart = {
-                        foodListViewmodel.deleteFoodFromCart(food.yemek_id, "enes")
+                        foodListViewmodel.deleteFoodFromCart(food.yemek_id.toInt(), "enes")
                     },
                     onClick = {
                         val foodJson = Gson().toJson(food)
@@ -179,7 +180,7 @@ fun FoodListScreen(navController: NavHostController) {
                     }
                     ,
                     onFavoriteClick = {
-
+                        foodFavoritesViewmodel.saveFavFood(food.yemek_adi, food.yemek_fiyat, food.yemek_id, food.yemek_resim_adi)
                     }
                 )
             }
