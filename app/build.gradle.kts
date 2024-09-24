@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -91,5 +92,10 @@ dependencies {
     implementation("com.github.skydoves:landscapist-glide:1.3.7")
 
     implementation(libs.androidx.material)
+
+    // Firebase Firestore
+
+    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
+    implementation("com.google.firebase:firebase-firestore:25.1.0")
 
 }
