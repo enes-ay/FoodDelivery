@@ -1,5 +1,6 @@
 package com.example.fooddelivery.ui.presentation.Cart
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fooddelivery.data.model.SepetYemekler
@@ -10,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.EOFException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +24,13 @@ class CartViewmodel @Inject constructor(val foodsRepository: FoodsRepository): V
 
     fun getCartFoods(kullanici_adi:String) {
         CoroutineScope(Dispatchers.Main).launch {
-            foods.value = foodsRepository.getFoodsInCart(kullanici_adi)
+            try {
+                foods.value = foodsRepository.getFoodsInCart(kullanici_adi)
+            }
+            catch (e:EOFException){
+                foods.value = listOf()
+                Log.e("eof", "hata eof")
+            }
         }
     }
     fun addFoodToCart(yemek_adi:String, yemek_resim_adi: String, yemek_fiyat: Int,

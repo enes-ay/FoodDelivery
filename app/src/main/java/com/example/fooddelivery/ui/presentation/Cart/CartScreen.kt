@@ -74,10 +74,20 @@ fun CartScreen(modifier: Modifier = Modifier, navController: NavHostController) 
     }
 
     Scaffold(
-        modifier=Modifier.fillMaxSize(),
-        topBar = { TopAppBar(title = { Text(text = "Cart", fontSize = 24.sp,) }) },
+        modifier = Modifier.fillMaxSize(),
+        topBar = { TopAppBar(title = { Text(text = "Cart", fontSize = 24.sp) }) },
         bottomBar = { BottomBar(navController = navController) }
     ) { paddingValues ->
+
+        if (cartFoods.isNullOrEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "No food found")
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -98,7 +108,7 @@ fun CartScreen(modifier: Modifier = Modifier, navController: NavHostController) 
                         food = food.copy(yemek_siparis_adet = siparisAdet),
                         onClick = {
                             var foodJson = Gson().toJson(food)
-                            navController.navigate("foodDetail/$foodJson"){
+                            navController.navigate("foodDetail/$foodJson") {
                                 popUpTo("cart")
                             }
                         },
@@ -152,13 +162,12 @@ fun CartScreen(modifier: Modifier = Modifier, navController: NavHostController) 
 }
 
 
-
 @Composable
 fun CartItem(
     food: SepetYemekler,
     onClick: () -> Unit,
     onDelete: () -> Unit,
-    onAddToCart :()-> Unit,
+    onAddToCart: () -> Unit,
     initialCount: Int = 0, // Use this to initialize the count, maybe fetched from the cart
 
 ) {
@@ -172,10 +181,11 @@ fun CartItem(
         shape = RoundedCornerShape(16.dp), // Rounded corners
         // elevation = 8.dp, // Elevation for the card shadow
     ) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .height(120.dp)
-            .padding(vertical = 4.dp, horizontal = 10.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp)
+                .padding(vertical = 4.dp, horizontal = 10.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -183,7 +193,10 @@ fun CartItem(
                     .weight(1.5f)
             ) {
 
-                GlideImage(modifier = Modifier.size(160.dp).weight(1f),
+                GlideImage(
+                    modifier = Modifier
+                        .size(160.dp)
+                        .weight(1f),
                     imageModel = "http://kasimadalan.pe.hu/yemekler/resimler/${food.yemek_resim_adi}",
                     contentScale = ContentScale.Crop,
                 )
@@ -225,7 +238,7 @@ fun CartItem(
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (count==1){
+                        if (count == 1) {
                             IconButton(
                                 modifier = Modifier.size(36.dp), // Set fixed size for the button
                                 onClick = {
@@ -238,8 +251,7 @@ fun CartItem(
                                     contentDescription = "icon delete"
                                 )
                             }
-                        }
-                        else if (count > 0) {
+                        } else if (count > 0) {
                             IconButton(
                                 modifier = Modifier.size(36.dp), // Set fixed size for the button
                                 onClick = {
