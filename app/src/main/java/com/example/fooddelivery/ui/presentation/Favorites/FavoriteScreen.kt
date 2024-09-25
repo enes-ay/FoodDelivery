@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +42,7 @@ import com.example.fooddelivery.BottomBar
 import com.example.fooddelivery.R
 import com.example.fooddelivery.data.model.SepetYemekler
 import com.example.fooddelivery.data.model.YemeklerFirebase
+import com.example.fooddelivery.ui.theme.primaryColor
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,8 +57,16 @@ fun Favorites(navController: NavHostController) {
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text(text = "Favorite Foods") })
-        },
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Favorites",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryColor)
+            )        },
         bottomBar = { BottomBar(navController = navController) }) { paddingValues ->
         LazyColumn(
             modifier = Modifier

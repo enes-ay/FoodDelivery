@@ -55,12 +55,13 @@ import androidx.navigation.NavHostController
 import com.example.fooddelivery.BottomBar
 import com.example.fooddelivery.R
 import com.example.fooddelivery.data.model.SepetYemekler
+import com.example.fooddelivery.ui.theme.primaryColor
 import com.google.gson.Gson
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun CartScreen(navController: NavHostController) {
 
     val cartViewmodel: CartViewmodel = hiltViewModel()
     val cartFoods by cartViewmodel.foods.observeAsState(initial = listOf())
@@ -75,7 +76,19 @@ fun CartScreen(modifier: Modifier = Modifier, navController: NavHostController) 
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { TopAppBar(title = { Text(text = "Cart", fontSize = 24.sp) }) },
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Cart",
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryColor)
+            )
+        },
         bottomBar = { BottomBar(navController = navController) }
     ) { paddingValues ->
 
@@ -217,7 +230,7 @@ fun CartItem(
                 )
 
                 Text(
-                    text = "${food.yemek_fiyat}₺",
+                    text = "${food.yemek_fiyat*food.yemek_siparis_adet}₺",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )

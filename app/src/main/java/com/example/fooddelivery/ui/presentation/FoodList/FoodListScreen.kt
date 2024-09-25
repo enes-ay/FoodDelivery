@@ -36,6 +36,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -63,6 +65,7 @@ import com.example.fooddelivery.BottomBar
 import com.example.fooddelivery.R
 import com.example.fooddelivery.data.model.Yemekler
 import com.example.fooddelivery.ui.presentation.Favorites.FavoritesViewmodel
+import com.example.fooddelivery.ui.theme.primaryColor
 import com.example.fooddelivery.utils.Constants
 import com.google.gson.Gson
 import com.skydoves.landscapist.glide.GlideImage
@@ -88,7 +91,8 @@ fun FoodListScreen(navController: NavHostController) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             Column {
-                TopAppBar(title = { Text(text = "Food List") })
+                TopAppBar(title = { Text(text = "Food List", color = Color.White, fontWeight = FontWeight.Bold) },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryColor))
                 TextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
@@ -137,8 +141,8 @@ fun FoodListScreen(navController: NavHostController) {
                         .padding(8.dp)
                         .shadow(4.dp, RoundedCornerShape(8.dp))
                         .onFocusChanged { focusState ->
-                        isFocused = focusState.isFocused // Focus durumunu takip et
-                    }
+                            isFocused = focusState.isFocused // Focus durumunu takip et
+                        }
                 )
 
             }

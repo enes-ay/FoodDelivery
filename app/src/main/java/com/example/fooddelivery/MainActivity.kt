@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +42,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.fooddelivery.ui.presentation.NavGraph
 import com.example.fooddelivery.ui.presentation.Screens
 import com.example.fooddelivery.ui.theme.FoodDeliveryTheme
+import com.example.fooddelivery.ui.theme.primaryColor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,7 +65,7 @@ class MainActivity : ComponentActivity() {
 fun shouldShowBottomBar(navController: NavController): Boolean {
     // Don't show the bottom bar on the login page
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    return currentRoute != "cart    "
+    return currentRoute != "cart"
 }
 
 @Composable
@@ -78,6 +80,7 @@ fun BottomBar(navController: NavController) {
     NavigationBar(
         containerColor = Color.White,
         contentColor = Color.Black,
+
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
@@ -87,16 +90,10 @@ fun BottomBar(navController: NavController) {
                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                 onClick = {
                     navController.navigate(item.route) {
-                        // Pop up to the start destination of the graph to
-                        // avoid building up a large stack of destinations
-                        // on the back stack as users select items
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
-                        // Avoid multiple copies of the same destination when
-                        // reselecting the same item
                         launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
                         restoreState = true
                     }
                 },
@@ -109,7 +106,13 @@ fun BottomBar(navController: NavController) {
                     }
                        }
                 ,
-                label = { Text(text = item.label) })
+                label = { Text(text = item.label) },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = primaryColor,
+                    selectedTextColor = primaryColor,
+                    indicatorColor = Color.Transparent
+                )
+                )
         }
 
     }
