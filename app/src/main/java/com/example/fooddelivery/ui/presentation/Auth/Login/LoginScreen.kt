@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import com.example.fooddelivery.ui.presentation.Auth.AuthState
@@ -16,11 +17,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,6 +42,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,6 +54,8 @@ import androidx.credentials.exceptions.GetCredentialException
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.fooddelivery.BuildConfig
+import com.example.fooddelivery.R
+import com.example.fooddelivery.ui.theme.primaryColor
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -83,19 +93,22 @@ fun Login(navController: NavController) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(20.dp)
-                    .background(Color.White, shape = RoundedCornerShape(16.dp))
-                    .padding(24.dp),
+                    .background(Color.White, shape = RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Column(
+                Column(modifier = Modifier.padding(20.dp)
+                    ,
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(vertical = 20.dp),
                         text = "Login",
                         style = MaterialTheme.typography.displaySmall,
-                        color = MaterialTheme.colorScheme.primary
+                        fontWeight = FontWeight.Medium,
+                        color = primaryColor
                     )
 
                     TextField(
@@ -107,10 +120,16 @@ fun Login(navController: NavController) {
                         label = { Text("Email") },
                         isError = emailError.value != null,
                         colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color(0xFFF2F2F2)
+                            containerColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
+                            .border(
+                                BorderStroke(2.dp, Color.Gray),
+                                shape = MaterialTheme.shapes.small
+                            )
                     )
                     if (emailError.value != null) {
                         Text(text = emailError.value!!, color = Color.Red, fontSize = 12.sp)
@@ -118,6 +137,7 @@ fun Login(navController: NavController) {
 
                     TextField(
                         value = password.value,
+                        singleLine = true,
                         onValueChange = {
                             password.value = it
                             passwordError.value = null
@@ -125,10 +145,16 @@ fun Login(navController: NavController) {
                         label = { Text("Password") },
                         isError = passwordError.value != null,
                         colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color(0xFFF2F2F2)
+                            containerColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
+                            .border(
+                                BorderStroke(2.dp, Color.Gray),
+                                shape = MaterialTheme.shapes.small
+                            )
 
                     )
                     if (passwordError.value != null) {
@@ -148,12 +174,12 @@ fun Login(navController: NavController) {
                                     loginViewmodel.signIn(email.value, password.value)
                                 }
                             },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.width(300.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary
+                                containerColor = primaryColor,
                             )
                         ) {
-                            Text("Login", color = Color.White)
+                            Text("Login", fontSize = 17.sp, fontWeight = FontWeight.Medium)
                         }
 
                         is AuthState.Loading -> CircularProgressIndicator()
@@ -199,7 +225,7 @@ fun Login(navController: NavController) {
                         onGetCredentialResponse = { credential ->
                             loginViewmodel.signInWithGoogle(credential, navigate = {
                                 navController.navigate(it) {
-                                    popUpTo("login"){
+                                    popUpTo("login") {
                                         inclusive = true
                                     }
                                 }
@@ -220,30 +246,34 @@ fun GoogleLoginButton(
     val coroutineScope = rememberCoroutineScope()
     val credentialManager = CredentialManager.create(context)
 
-    Button(onClick = {
-        val googleIdOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
-            .build()
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
-            .build()
+    Button(modifier = Modifier.width(200.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = primaryColor
+        ),
+        onClick = {
+            val googleIdOption = GetGoogleIdOption.Builder()
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
+                .build()
+            val request = GetCredentialRequest.Builder()
+                .addCredentialOption(googleIdOption)
+                .build()
 
-        coroutineScope.launch {
-            try {
-                val result = credentialManager.getCredential(
-                    request = request,
-                    context = context
-                )
-                onGetCredentialResponse(result.credential)
-                Log.e("credentialError", result.credential.toString())
-            } catch (e: GetCredentialException) {
-                Log.e("credentialError", e.message.orEmpty())
+            coroutineScope.launch {
+                try {
+                    val result = credentialManager.getCredential(
+                        request = request,
+                        context = context
+                    )
+                    onGetCredentialResponse(result.credential)
+                    Log.e("credentialError", result.credential.toString())
+                } catch (e: GetCredentialException) {
+                    Log.e("credentialError", e.message.orEmpty())
+                }
             }
-        }
 
-    }) {
-        Text("Sign-in with Google")
+        }) {
+        Text("Sign in with Google", fontSize = 16.sp, fontWeight = FontWeight.Medium)
     }
 
 }
