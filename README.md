@@ -4,6 +4,8 @@ A simple Food Delivery app that uses hilt, retrofit, glide, mvvm.
 Preview Screenshots
 ===========
 <p align="center">
+ <img src="/Screenshots/login.png" alt="Login Page" width="250"/>
+  <img src="/Screenshots/register.png" alt="Register Page" width="250"/>
   <img src="/Screenshots/list1.png" alt="List Page" width="250"/>
   <img src="/Screenshots/detail.png" alt="Detail Page" width="250"/>
   <img src="/Screenshots/cart.png" alt="Car Page" width="250"/>
