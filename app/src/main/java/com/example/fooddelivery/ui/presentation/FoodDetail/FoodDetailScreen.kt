@@ -44,6 +44,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.fooddelivery.R
 import com.example.fooddelivery.data.model.SepetYemekler
 import com.example.fooddelivery.data.model.Yemekler
+import com.example.fooddelivery.ui.theme.primaryColor
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,7 +94,7 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
                               .padding(top = 8.dp), // Sabit yükseklik
                           shape = RoundedCornerShape(4.dp), // Yuvarlak köşeler
                           colors = ButtonDefaults.buttonColors(
-                              containerColor = androidx.compose.material3.MaterialTheme.colorScheme.primary, // Tema rengine göre arka plan
+                              containerColor = primaryColor, // Tema rengine göre arka plan
                               contentColor = Color.White // Beyaz yazı rengi
                           )
                       ) {
@@ -102,7 +103,9 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
                   } else {
                       // "-" butonu, sayacı ve "+" butonu
                       IconButton(
-                          modifier = Modifier.size(43.dp).padding(top = 14.dp), // Sabit boyut
+                          modifier = Modifier
+                              .size(43.dp)
+                              .padding(top = 14.dp), // Sabit boyut
                           onClick = {
                               count--
                           }
@@ -118,7 +121,9 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
 
                       // Miktar gösterimi
                       Text(
-                          modifier = Modifier.padding(horizontal = 13.dp).padding(top = 14.dp),
+                          modifier = Modifier
+                              .padding(horizontal = 13.dp)
+                              .padding(top = 14.dp),
                           text = "$count",
                           fontSize = 25.sp,
                           fontWeight = FontWeight.Medium,
@@ -127,7 +132,9 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
 
                       // "+" butonu
                       IconButton(
-                          modifier = Modifier.size(43.dp).padding(top = 14.dp),
+                          modifier = Modifier
+                              .size(43.dp)
+                              .padding(top = 14.dp),
                           onClick = {
                               count++
                           }
@@ -151,7 +158,8 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
                 Button(
                     modifier = Modifier
                         .defaultMinSize(minWidth = 200.dp) // Butonun minimum genişliği sabit
-                        .padding(end = 10.dp), // Sağdan biraz boşluk bırakıyoruz
+                        .padding(end = 10.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = primaryColor),// Sağdan biraz boşluk bırakıyoruz
                     onClick = {
                         if(count>0){
                             foodDetailViewmodel.addFoodToCart(food.yemek_adi,food.yemek_resim_adi, food.yemek_fiyat, count, "enes" )

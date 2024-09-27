@@ -1,16 +1,25 @@
 package com.example.fooddelivery.ui.presentation.Profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.ArrowForward
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -43,32 +52,59 @@ fun ProfileScreen(navController: NavHostController) {
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = {
-                    androidx.compose.material.Text(
-                        text = "Profile",
-                        fontSize = 24.sp,
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = "Profile",
+                            fontSize = 24.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryColor)
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(140.dp)
+                        .background(primaryColor),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        modifier = Modifier.size(100.dp),
+                        imageVector = Icons.Outlined.Person, contentDescription = "profile photo"
+                    )
+                    Text(
+                        text = "John Doe",
+                        fontSize = 25.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryColor)
-            )
+                }
+
+            }
         }, bottomBar = { BottomBar(navController = navController) }) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(vertical = 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(paddingValues), verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Text("Welcome!", fontSize = 25.sp)
-            Image(
-                modifier = Modifier.size(150.dp),
+            Column(modifier = Modifier.fillMaxSize()) {
 
-                imageVector = Icons.Default.Person, contentDescription = "profile photo"
-            )
+                ProfileItem("Update Profile")
+                ProfileItem("My Orders")
+                ProfileItem("My Adresses")
+                ProfileItem("Settings")
+                ProfileItem("FAQ")
+                ProfileItem("Sign Out")
+
+            }
             Text(
                 modifier = Modifier.clickable {
                     showDialog = true
@@ -81,8 +117,8 @@ fun ProfileScreen(navController: NavHostController) {
                 onConfirm = {
                     loginViewmodel.signOut()
                     if (authState is AuthState.Idle) {
-                        navController.navigate("login"){
-                            popUpTo("profile"){
+                        navController.navigate("login") {
+                            popUpTo("profile") {
                                 inclusive = true
                             }
                         }
@@ -116,5 +152,27 @@ fun SignOutDialog(
                 }
             }
         )
+    }
+}
+
+@Composable
+fun ProfileItem(name: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { },
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .height(60.dp)
+                .padding(10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = name, fontSize = 18.sp)
+            Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = "arrow icon")
+        }
     }
 }

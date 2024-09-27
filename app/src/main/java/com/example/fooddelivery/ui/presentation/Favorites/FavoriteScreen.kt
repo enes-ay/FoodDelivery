@@ -1,5 +1,6 @@
 package com.example.fooddelivery.ui.presentation.Favorites
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.outlined.ArrowForward
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -93,13 +99,14 @@ fun CardItem(food: YemeklerFirebase,
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp) // Add padding around the card
-            .clickable { }
             .shadow(8.dp, RoundedCornerShape(16.dp)), // Add shadow and round corners
         shape = RoundedCornerShape(16.dp), // Rounded corners
         // elevation = 8.dp, // Elevation for the card shadow
     ) {
         Row(modifier = Modifier
             .fillMaxWidth()
+            .clickable { }
+            .background(Color.White)
             .height(120.dp)
             .padding(vertical = 4.dp, horizontal = 10.dp)
         ) {
@@ -145,12 +152,12 @@ fun CardItem(food: YemeklerFirebase,
             ) {
 
                 Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceAround,
+                    modifier = Modifier.fillMaxSize().padding(end = 12.dp),
+                    horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-             
+                    Icon(imageVector = Icons.Outlined.Favorite, contentDescription = "arrow icon", tint = primaryColor)
                 }
             }
         }
