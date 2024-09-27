@@ -1,6 +1,7 @@
 package com.example.fooddelivery.ui.presentation.FoodList
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -131,7 +132,7 @@ fun FoodListScreen(navController: NavHostController) {
                     singleLine = true, // Tek satırlık giriş
                     shape = RoundedCornerShape(8.dp), // Köşeleri yuvarlatılmış
                     colors = TextFieldDefaults.textFieldColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        containerColor = Color.White,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         // placeholderColor = Color.Gray // Placeholder rengi
@@ -215,7 +216,7 @@ fun FoodItemCard(
         shape = RoundedCornerShape(16.dp),
     ) {
 
-        Box {
+        Box(modifier = Modifier.fillMaxSize().background(Color.White)){
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -237,7 +238,7 @@ fun FoodItemCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(text = food.yemek_adi, fontSize = 22.sp)
+                    Text(text = food.yemek_adi, fontSize = 22.sp, fontWeight = FontWeight.Bold)
                 }
 
                 Column(
@@ -247,7 +248,7 @@ fun FoodItemCard(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "${food.yemek_fiyat}₺", fontSize = 23.sp)
+                    Text(text = "${food.yemek_fiyat}₺", fontSize = 19.sp)
 
                     Row(
                         modifier = Modifier
@@ -263,12 +264,11 @@ fun FoodItemCard(
                                     onAddToCart()
                                 },
                                 modifier = Modifier
-                                    .fillMaxWidth()
                                     .wrapContentWidth()
                                     .padding(top = 8.dp),
                                 shape = RoundedCornerShape(4.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    containerColor = primaryColor,
                                     contentColor = Color.White
                                 )
                             ) {

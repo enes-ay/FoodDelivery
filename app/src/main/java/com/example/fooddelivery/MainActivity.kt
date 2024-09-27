@@ -31,8 +31,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -43,6 +45,8 @@ import com.example.fooddelivery.ui.presentation.NavGraph
 import com.example.fooddelivery.ui.presentation.Screens
 import com.example.fooddelivery.ui.theme.FoodDeliveryTheme
 import com.example.fooddelivery.ui.theme.primaryColor
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,6 +58,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             FoodDeliveryTheme {
                 NavGraph(navController)
+
             }
         }
 
@@ -106,7 +111,7 @@ fun BottomBar(navController: NavController) {
                     }
                        }
                 ,
-                label = { Text(text = item.label) },
+                label = { Text(text = item.label, fontWeight = FontWeight.Medium, fontSize = 16.sp) },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = primaryColor,
                     selectedTextColor = primaryColor,

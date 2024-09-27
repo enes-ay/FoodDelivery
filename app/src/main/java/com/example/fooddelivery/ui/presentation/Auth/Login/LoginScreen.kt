@@ -1,5 +1,10 @@
 package com.example.fooddelivery.ui.presentation.Auth.Login
 
+import android.app.Activity
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import com.example.fooddelivery.ui.presentation.Auth.AuthState
@@ -25,15 +30,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.credentials.Credential
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.fooddelivery.BuildConfig
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -138,7 +159,10 @@ fun Login(navController: NavController) {
                         is AuthState.Loading -> CircularProgressIndicator()
 
                         is AuthState.Authenticated -> {
-                            Text(text = "Login Successful!", color = MaterialTheme.colorScheme.primary)
+                            Text(
+                                text = "Login Successful!",
+                                color = MaterialTheme.colorScheme.primary
+                            )
                             navController.navigate("foodList") {
                                 popUpTo("login") { inclusive = true }
                             }
@@ -171,8 +195,55 @@ fun Login(navController: NavController) {
                         color = MaterialTheme.colorScheme.secondary,
                         textAlign = TextAlign.Center
                     )
+                    GoogleLoginButton(
+                        onGetCredentialResponse = { credential ->
+                            loginViewmodel.signInWithGoogle(credential, navigate = {
+                                navController.navigate(it) {
+                                    popUpTo("login"){
+                                        inclusive = true
+                                    }
+                                }
+                            })
+                        }
+                    )
                 }
             }
         }
     }
+}
+
+@Composable
+fun GoogleLoginButton(
+    onGetCredentialResponse: (Credential) -> Unit,
+) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val credentialManager = CredentialManager.create(context)
+
+    Button(onClick = {
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
+            .build()
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+        coroutineScope.launch {
+            try {
+                val result = credentialManager.getCredential(
+                    request = request,
+                    context = context
+                )
+                onGetCredentialResponse(result.credential)
+                Log.e("credentialError", result.credential.toString())
+            } catch (e: GetCredentialException) {
+                Log.e("credentialError", e.message.orEmpty())
+            }
+        }
+
+    }) {
+        Text("Sign-in with Google")
+    }
+
 }

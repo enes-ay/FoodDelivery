@@ -81,7 +81,11 @@ fun ProfileScreen(navController: NavHostController) {
                 onConfirm = {
                     loginViewmodel.signOut()
                     if (authState is AuthState.Idle) {
-                        navController.navigate("login")
+                        navController.navigate("login"){
+                            popUpTo("profile"){
+                                inclusive = true
+                            }
+                        }
                     }
                     showDialog = false
                 },
