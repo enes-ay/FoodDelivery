@@ -5,14 +5,17 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
@@ -20,6 +23,11 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -83,10 +91,19 @@ fun BottomBar(navController: NavController) {
         Screens.Favorites,
     )
     NavigationBar(
+        modifier = Modifier.border(
+            BorderStroke(1.dp, Color.Gray.copy(alpha = 0.2f)), // Şeffaf bir gri sınır
+            shape = CutCornerShape(
+                topStart = 0.dp,
+                topEnd = 0.dp,
+                bottomEnd = 0.dp,
+                bottomStart = 0.dp
+            ) // Sadece üst kenarda sınır
+        ),
         containerColor = Color.White,
         contentColor = Color.Black,
 
-    ) {
+        ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
@@ -104,20 +121,29 @@ fun BottomBar(navController: NavController) {
                 },
                 icon = {
                     when (item.label) {
-                        "Home" -> Icon(Icons.Default.Home, contentDescription = "Home")
-                        "Favorites" -> Icon(Icons.Default.Favorite, contentDescription = "Favorites")
-                        "Cart" -> Icon(Icons.Default.ShoppingCart, contentDescription = "Cart")
-                        "Profile" -> Icon(Icons.Default.Person, contentDescription = "Profile")
+                        "Home" -> Icon(Icons.Outlined.Home, contentDescription = "Home")
+                        "Favorites" -> Icon(
+                            Icons.Outlined.FavoriteBorder,
+                            contentDescription = "Favorites"
+                        )
+
+                        "Cart" -> Icon(Icons.Outlined.ShoppingCart, contentDescription = "Cart")
+                        "Profile" -> Icon(Icons.Outlined.Person, contentDescription = "Profile")
                     }
-                       }
-                ,
-                label = { Text(text = item.label, fontWeight = FontWeight.Medium, fontSize = 16.sp) },
+                },
+                label = {
+                    Text(
+                        text = item.label,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp
+                    )
+                },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = primaryColor,
                     selectedTextColor = primaryColor,
                     indicatorColor = Color.Transparent
                 )
-                )
+            )
         }
 
     }

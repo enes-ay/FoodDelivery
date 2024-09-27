@@ -151,10 +151,11 @@ fun CartScreen(navController: NavHostController) {
                 // Confirm Cart Button
                 Button(
                     modifier = Modifier
-                        .defaultMinSize(minWidth = 200.dp) // Butonun minimum genişliği sabit
-                        .padding(end = 10.dp), // Sağdan biraz boşluk bırakıyoruz
+                        .defaultMinSize(minWidth = 200.dp)
+                        .padding(end = 10.dp),
                     onClick = { /* Confirm Cart action */ },
-                    shape = RectangleShape
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(containerColor = primaryColor)
                 ) {
                     Text(
                         text = "Confirm Cart",
@@ -197,6 +198,7 @@ fun CartItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(Color.White)
                 .height(120.dp)
                 .padding(vertical = 4.dp, horizontal = 10.dp)
         ) {
