@@ -13,6 +13,8 @@ import com.example.fooddelivery.ui.presentation.Cart.CartScreen
 import com.example.fooddelivery.ui.presentation.Favorites.Favorites
 import com.example.fooddelivery.ui.presentation.FoodDetail.FoodDetailScreen
 import com.example.fooddelivery.ui.presentation.FoodList.FoodListScreen
+import com.example.fooddelivery.ui.presentation.OrderList.OrderListScreen
+import com.example.fooddelivery.ui.presentation.Profile.Address.AddressScreen
 import com.example.fooddelivery.ui.presentation.Profile.ProfileScreen
 import com.example.fooddelivery.ui.presentation.SplashScreen.Splash
 import com.google.gson.Gson
@@ -48,6 +50,12 @@ fun NavGraph(navController: NavHostController) {
         }
         composable("profile"){
             ProfileScreen(navController)
+        }
+        composable("address"){
+            AddressScreen(navController)
+        }
+        composable("orderList"){
+            OrderListScreen(navController)
         }
     }
 }

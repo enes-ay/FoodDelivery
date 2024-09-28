@@ -106,7 +106,7 @@ fun ProfileScreen(navController: NavHostController) {
 
             }
             Text(
-                modifier = Modifier.clickable {
+                modifier = Modifier.fillMaxWidth().clickable {
                     showDialog = true
                 },
                 text = "Sign out", color = Color.Red, fontSize = 26.sp

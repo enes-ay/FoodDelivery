@@ -13,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -212,15 +213,24 @@ fun Login(navController: NavController) {
                         }
                     }
 
-                    Text(
-                        text = "Don't have an account? Create here!",
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .clickable { navController.navigate("register") },
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.secondary,
-                        textAlign = TextAlign.Center
-                    )
+                   Row (modifier= Modifier.fillMaxWidth().padding(10.dp),
+                       horizontalArrangement = Arrangement.Absolute.Center){
+                       Text(
+                           text = "Don't have an account? ",
+                           fontSize = 16.sp,
+                           color = MaterialTheme.colorScheme.secondary,
+                           textAlign = TextAlign.Center
+                       )
+                       Text(
+                           text = "Create here!",
+                           modifier = Modifier
+                               .clickable { navController.navigate("register") },
+                           fontSize = 16.sp,
+                           color = primaryColor,
+                           textAlign = TextAlign.Center
+                       )
+
+                   }
                     GoogleLoginButton(
                         onGetCredentialResponse = { credential ->
                             loginViewmodel.signInWithGoogle(credential, navigate = {
