@@ -21,13 +21,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,6 +44,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -45,6 +52,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -90,6 +100,7 @@ fun Login(navController: NavController) {
             val password = remember { mutableStateOf("") }
             val emailError = remember { mutableStateOf<String?>(null) }
             val passwordError = remember { mutableStateOf<String?>(null) }
+            var passwordVisible by remember { mutableStateOf(false) }
 
             Box(
                 modifier = Modifier
@@ -97,8 +108,8 @@ fun Login(navController: NavController) {
                     .background(Color.White, shape = RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Column(modifier = Modifier.padding(20.dp)
-                    ,
+                Column(
+                    modifier = Modifier.padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -114,12 +125,16 @@ fun Login(navController: NavController) {
 
                     TextField(
                         value = email.value,
+                        maxLines = 1,
+                        singleLine = true,
                         onValueChange = {
                             email.value = it
                             emailError.value = null
                         },
+
                         label = { Text("Email") },
                         isError = emailError.value != null,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.White,
                             focusedIndicatorColor = Color.Transparent,
@@ -138,13 +153,31 @@ fun Login(navController: NavController) {
 
                     TextField(
                         value = password.value,
+                        maxLines = 1,
                         singleLine = true,
                         onValueChange = {
                             password.value = it
                             passwordError.value = null
                         },
                         label = { Text("Password") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         isError = passwordError.value != null,
+                        trailingIcon = {
+                            val image = if (passwordVisible)
+                                Icons.Filled.Done
+                            else
+                                Icons.Filled.Close
+
+                            IconButton(onClick = {
+                                passwordVisible = !passwordVisible
+                            }) {
+                                Icon(
+                                    imageVector = image,
+                                    contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                                )
+                            }
+                        },
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.White,
                             focusedIndicatorColor = Color.Transparent,
@@ -206,31 +239,35 @@ fun Login(navController: NavController) {
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.error
-                                )
+                                ),
                             ) {
                                 Text("Retry", color = Color.White)
                             }
                         }
                     }
 
-                   Row (modifier= Modifier.fillMaxWidth().padding(10.dp),
-                       horizontalArrangement = Arrangement.Absolute.Center){
-                       Text(
-                           text = "Don't have an account? ",
-                           fontSize = 16.sp,
-                           color = MaterialTheme.colorScheme.secondary,
-                           textAlign = TextAlign.Center
-                       )
-                       Text(
-                           text = "Create here!",
-                           modifier = Modifier
-                               .clickable { navController.navigate("register") },
-                           fontSize = 16.sp,
-                           color = primaryColor,
-                           textAlign = TextAlign.Center
-                       )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        horizontalArrangement = Arrangement.Absolute.Center
+                    ) {
+                        Text(
+                            text = "Don't have an account? ",
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.secondary,
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = "Create here!",
+                            modifier = Modifier
+                                .clickable { navController.navigate("register") },
+                            fontSize = 16.sp,
+                            color = primaryColor,
+                            textAlign = TextAlign.Center
+                        )
 
-                   }
+                    }
                     GoogleLoginButton(
                         onGetCredentialResponse = { credential ->
                             loginViewmodel.signInWithGoogle(credential, navigate = {

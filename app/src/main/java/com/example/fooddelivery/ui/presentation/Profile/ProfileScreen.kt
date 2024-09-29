@@ -97,20 +97,17 @@ fun ProfileScreen(navController: NavHostController) {
 
             Column(modifier = Modifier.fillMaxSize()) {
 
-                ProfileItem("Update Profile")
-                ProfileItem("My Orders")
-                ProfileItem("My Adresses")
-                ProfileItem("Settings")
-                ProfileItem("FAQ")
-                ProfileItem("Sign Out")
+                ProfileItem("My Addresses", onClick = {
+                    navController.navigate("address")
+                })
+                ProfileItem("Update Profile", onClick = {})
+                ProfileItem("Settings", onClick = {})
+                ProfileItem("FAQ", onClick = {})
+                ProfileItem("Sign out", onClick = {
+                    showDialog = true
+                })
 
             }
-            Text(
-                modifier = Modifier.fillMaxWidth().clickable {
-                    showDialog = true
-                },
-                text = "Sign out", color = Color.Red, fontSize = 26.sp
-            )
             SignOutDialog(
                 showDialog = showDialog,
                 onDismiss = { showDialog = false },
@@ -156,11 +153,11 @@ fun SignOutDialog(
 }
 
 @Composable
-fun ProfileItem(name: String) {
+fun ProfileItem(name: String, onClick : () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { },
+            .clickable { onClick() },
     ) {
         Row(
             modifier = Modifier
