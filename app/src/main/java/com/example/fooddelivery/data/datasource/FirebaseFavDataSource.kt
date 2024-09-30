@@ -4,8 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.fooddelivery.data.model.Yemekler
 import com.example.fooddelivery.data.model.YemeklerFirebase
 import com.google.firebase.firestore.CollectionReference
+import javax.inject.Inject
+import javax.inject.Named
 
-class FirebaseFavDataSource (val collectionFavFoods: CollectionReference) {
+class FirebaseFavDataSource @Inject constructor(@FavoriteCollection val collectionFavFoods: CollectionReference) {
 
     var favFoodsList = MutableLiveData<List<YemeklerFirebase>>()
 

@@ -1,5 +1,6 @@
 package com.example.fooddelivery.di
 
+import com.example.fooddelivery.data.datasource.FavoriteCollection
 import com.example.fooddelivery.data.datasource.FirebaseFavDataSource
 import com.example.fooddelivery.data.repository.FirebaseFavRepository
 import com.google.firebase.Firebase
@@ -10,6 +11,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -23,16 +25,17 @@ class FirebaseFavModule {
     }
     @Provides
     @Singleton
-    fun provideFavFoodDatasource(collectionFavFoods: CollectionReference) : FirebaseFavDataSource {
+    fun provideFavFoodDatasource(@FavoriteCollection collectionFavFoods: CollectionReference) : FirebaseFavDataSource {
 
         return FirebaseFavDataSource(collectionFavFoods)
     }
-    @Provides
-    @Singleton
-    fun provideFavCollectionReference() : CollectionReference {
-
-        return  Firebase.firestore.collection("Favorites")
-    }
+//    @Provides
+//    @FavoriteCollection
+//    @Singleton
+//    fun provideFavCollectionReference() : CollectionReference {
+//
+//        return  Firebase.firestore.collection("favorites")
+//    }
 
     @Provides
     @Singleton

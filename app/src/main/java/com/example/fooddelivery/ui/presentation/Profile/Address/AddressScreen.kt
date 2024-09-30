@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.fooddelivery.ui.theme.primaryColor
@@ -57,6 +58,8 @@ fun AddressScreen(navController: NavHostController) {
     val apartmentNoError = remember { mutableStateOf<String?>(null) }
     val phoneNumberError = remember { mutableStateOf<String?>(null) }
     val fullnameError = remember { mutableStateOf<String?>(null) }
+
+    val addressViewmodel: AddressViewmodel = hiltViewModel()
 
 
     Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
@@ -96,6 +99,7 @@ fun AddressScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
 
                 Text(
                     modifier = Modifier.padding(bottom = 20.dp),
@@ -290,8 +294,16 @@ fun AddressScreen(navController: NavHostController) {
                         if (phoneNumber.isBlank()) {
                             phoneNumberError.value = "Phone number cannot be empty"
                         }
-                        if (addressLabelError.value == null && streetNameError.value == null && apartmentNoError.value == null) {
-                            // loginViewmodel.signIn(email.value, password.value)
+                        if (addressLabelError.value == null && streetNameError.value == null && apartmentNoError.value == null && phoneNumberError.value == null
+                        ) {
+                            addressViewmodel.saveAddres(
+                                streetName,
+                                buildingNo,
+                                apartmentNo,
+                                addressLabel,
+                                fullname,
+                                phoneNumber
+                            )
                         }
                     }, modifier = Modifier
                         .fillMaxWidth()
