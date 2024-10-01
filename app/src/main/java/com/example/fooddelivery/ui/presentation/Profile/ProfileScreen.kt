@@ -45,7 +45,6 @@ import com.example.fooddelivery.ui.theme.primaryColor
 fun ProfileScreen(navController: NavHostController) {
     var showDialog by remember { mutableStateOf(false) }
     val loginViewmodel: LoginViewmodel = hiltViewModel()
-    val authState by loginViewmodel.authState
     val navState by loginViewmodel.navigationResult
 
     Scaffold(modifier = Modifier.fillMaxSize(),
@@ -96,7 +95,7 @@ fun ProfileScreen(navController: NavHostController) {
             Column(modifier = Modifier.fillMaxSize()) {
 
                 ProfileItem("My Addresses", onClick = {
-                    navController.navigate("address")
+                    navController.navigate("addressList")
                 })
                 ProfileItem("Update Profile", onClick = {})
                 ProfileItem("Settings", onClick = {})

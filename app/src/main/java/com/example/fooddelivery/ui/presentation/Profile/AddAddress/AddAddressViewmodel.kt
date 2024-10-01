@@ -1,4 +1,4 @@
-package com.example.fooddelivery.ui.presentation.Profile.Address
+package com.example.fooddelivery.ui.presentation.Profile.AddAddress
 
 import ResultState
 import androidx.lifecycle.ViewModel
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddressViewmodel @Inject constructor(val addressRepository: FirebaseAddressRepository) :
+class AddAddressViewmodel @Inject constructor(val addressRepository: FirebaseAddressRepository) :
     ViewModel() {
 
     private val _addressState = MutableStateFlow<ResultState>(ResultState.Idle)

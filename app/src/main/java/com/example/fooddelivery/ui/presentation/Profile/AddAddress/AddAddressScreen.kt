@@ -1,4 +1,4 @@
-package com.example.fooddelivery.ui.presentation.Profile.Address
+package com.example.fooddelivery.ui.presentation.Profile.AddAddress
 
 import ResultState
 import androidx.compose.foundation.BorderStroke
@@ -10,17 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -43,7 +39,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.fooddelivery.ui.theme.primaryColor
 
@@ -62,8 +57,8 @@ fun AddressScreen(navController: NavHostController) {
     val phoneNumberError = remember { mutableStateOf<String?>(null) }
     val fullnameError = remember { mutableStateOf<String?>(null) }
 
-    val addressViewmodel: AddressViewmodel = hiltViewModel()
-    val state by addressViewmodel.addressState.collectAsState()
+    val addAddressViewmodel: AddAddressViewmodel = hiltViewModel()
+    val state by addAddressViewmodel.addressState.collectAsState()
 
 
     Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
@@ -299,7 +294,7 @@ fun AddressScreen(navController: NavHostController) {
                         }
                         if (addressLabelError.value == null && streetNameError.value == null && apartmentNoError.value == null && phoneNumberError.value == null
                         ) {
-                            addressViewmodel.saveAddress(
+                            addAddressViewmodel.saveAddress(
                                 streetName,
                                 buildingNo,
                                 apartmentNo,
@@ -325,7 +320,9 @@ fun AddressScreen(navController: NavHostController) {
                     }
 
                     is ResultState.Success -> {
-                        Text(text = "Address saved successfully!")
+                        navController.navigate("addressList"){
+                            popUpTo("addAddress")
+                        }
                     }
 
                     is ResultState.Error -> {
