@@ -1,35 +1,22 @@
 package com.example.fooddelivery.ui.presentation.Auth.Login
 
 
-import android.content.Intent
-import android.credentials.*
 import android.util.Log
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.credentials.*
 import androidx.credentials.Credential
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.compose.rememberNavController
-import com.example.fooddelivery.BuildConfig
-import com.example.fooddelivery.R
 import com.example.fooddelivery.common.Resource
 import com.example.fooddelivery.data.repository.AccountService
 import com.example.fooddelivery.data.repository.FirebaseAuthRepository
-import com.example.fooddelivery.ui.presentation.Auth.AuthState
-import com.example.fooddelivery.ui.presentation.Auth.NavigationResult
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
+import com.example.fooddelivery.ui.presentation.Auth.States.AuthState
+import com.example.fooddelivery.ui.presentation.Auth.States.NavigationResult
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

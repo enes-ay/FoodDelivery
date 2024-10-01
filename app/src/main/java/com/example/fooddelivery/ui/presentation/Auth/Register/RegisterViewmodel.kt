@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fooddelivery.common.Resource
 import com.example.fooddelivery.data.repository.FirebaseAuthRepository
-import com.example.fooddelivery.ui.presentation.Auth.AuthState
+import com.example.fooddelivery.ui.presentation.Auth.States.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

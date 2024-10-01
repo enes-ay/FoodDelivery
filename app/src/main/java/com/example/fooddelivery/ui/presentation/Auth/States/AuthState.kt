@@ -1,4 +1,4 @@
-package com.example.fooddelivery.ui.presentation.Auth
+package com.example.fooddelivery.ui.presentation.Auth.States
 
 sealed class AuthState {
     object Idle : AuthState()

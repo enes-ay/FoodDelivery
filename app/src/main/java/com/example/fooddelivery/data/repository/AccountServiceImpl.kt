@@ -1,8 +1,5 @@
 package com.example.fooddelivery.data.repository
 
-import android.util.Log
-import com.example.fooddelivery.ui.presentation.Auth.AuthState
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.tasks.await

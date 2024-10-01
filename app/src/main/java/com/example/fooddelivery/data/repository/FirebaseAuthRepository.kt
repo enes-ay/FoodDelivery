@@ -1,22 +1,9 @@
 package com.example.fooddelivery.data.repository
 
 
-import android.content.Intent
-import android.content.IntentSender
-import android.util.Log
-import com.example.fooddelivery.BuildConfig
 import com.example.fooddelivery.common.Resource
-import com.example.fooddelivery.ui.presentation.Auth.AuthState
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
-import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.rpc.context.AttributeContext.Auth
 import kotlinx.coroutines.tasks.await
-import java.util.concurrent.CancellationException
-import java.util.concurrent.Flow
 import javax.inject.Inject
 
 class FirebaseAuthRepository @Inject

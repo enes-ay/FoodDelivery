@@ -11,11 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,9 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.fooddelivery.BottomBar
-import com.example.fooddelivery.ui.presentation.Auth.AuthState
 import com.example.fooddelivery.ui.presentation.Auth.Login.LoginViewmodel
-import com.example.fooddelivery.ui.presentation.Auth.NavigationResult
+import com.example.fooddelivery.ui.presentation.Auth.States.NavigationResult
 import com.example.fooddelivery.ui.theme.primaryColor
 
 @OptIn(ExperimentalMaterial3Api::class)

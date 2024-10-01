@@ -1,5 +1,6 @@
 package com.example.fooddelivery.ui.presentation.Profile.Address
 
+import ResultState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -22,12 +23,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,6 +63,7 @@ fun AddressScreen(navController: NavHostController) {
     val fullnameError = remember { mutableStateOf<String?>(null) }
 
     val addressViewmodel: AddressViewmodel = hiltViewModel()
+    val state by addressViewmodel.addressState.collectAsState()
 
 
     Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
@@ -276,7 +280,6 @@ fun AddressScreen(navController: NavHostController) {
                         text = phoneNumberError.value!!, color = Color.Red, fontSize = 12.sp
                     )
                 }
-
                 Button(
                     onClick = {
                         if (addressLabel.isBlank()) {
@@ -296,7 +299,7 @@ fun AddressScreen(navController: NavHostController) {
                         }
                         if (addressLabelError.value == null && streetNameError.value == null && apartmentNoError.value == null && phoneNumberError.value == null
                         ) {
-                            addressViewmodel.saveAddres(
+                            addressViewmodel.saveAddress(
                                 streetName,
                                 buildingNo,
                                 apartmentNo,
@@ -316,6 +319,27 @@ fun AddressScreen(navController: NavHostController) {
                         color = Color.White
                     )
                 }
+                when (state) {
+                    is ResultState.Loading -> {
+                        CircularProgressIndicator()
+                    }
+
+                    is ResultState.Success -> {
+                        Text(text = "Address saved successfully!")
+                    }
+
+                    is ResultState.Error -> {
+                        Text(
+                            text = "Error: ${
+                                (state as ResultState
+                                .Error).message
+                            }"
+                        )
+                    }
+                    else ->{
+                    }
+                }
+
             }
         }
     }

@@ -5,19 +5,14 @@ import com.example.fooddelivery.data.datasource.FirebaseFavDataSource
 import javax.inject.Inject
 
 class FirebaseAddressRepository @Inject constructor(var firebaseAddressDataSource: FirebaseAddressDataSource) {
-    fun saveAddress(
-        street: String, buildingNo: String,
+    suspend fun saveAddress(
+        street: String,
+        buildingNo: String,
         apartmentNo: String,
         addressLabel: String,
         fullName: String,
-        phoneNumber: String,
-    ) {
-        try {
-            val result = firebaseAddressDataSource.saveAddress(
-                street, buildingNo, apartmentNo, addressLabel, fullName, phoneNumber)
-        }
-        catch (e:Exception){
-
-        }
+        phoneNumber: String
+    ): Result<Unit> {
+        return firebaseAddressDataSource.saveAddress(street, buildingNo, apartmentNo, addressLabel, fullName, phoneNumber)
     }
 }
