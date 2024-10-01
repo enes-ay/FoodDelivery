@@ -1,4 +1,4 @@
-package com.example.fooddelivery.ui.presentation.Profile.AddAddress
+package com.example.fooddelivery.ui.presentation.AddAddress
 
 import ResultState
 import androidx.compose.foundation.BorderStroke

@@ -14,7 +14,8 @@ import com.example.fooddelivery.ui.presentation.Favorites.Favorites
 import com.example.fooddelivery.ui.presentation.FoodDetail.FoodDetailScreen
 import com.example.fooddelivery.ui.presentation.FoodList.FoodListScreen
 import com.example.fooddelivery.ui.presentation.OrderList.OrderListScreen
-import com.example.fooddelivery.ui.presentation.Profile.AddAddress.AddressScreen
+import com.example.fooddelivery.ui.presentation.AddAddress.AddressScreen
+import com.example.fooddelivery.ui.presentation.AddressList.AddressListScreen
 import com.example.fooddelivery.ui.presentation.Profile.ProfileScreen
 import com.example.fooddelivery.ui.presentation.SplashScreen.Splash
 import com.google.gson.Gson
@@ -55,7 +56,7 @@ fun NavGraph(navController: NavHostController) {
             AddressScreen(navController)
         }
         composable("addressList"){
-            AddressScreen(navController)
+            AddressListScreen(navController)
         }
         composable("orderList"){
             OrderListScreen(navController)

@@ -23,4 +23,13 @@ class FirebaseAddressDataSource @Inject constructor (@AddressCollection val addr
             Result.failure(e)
         }
     }
+
+    suspend fun getAddresses(): List<Address> {
+        return try {
+            val snapshot = addressReference.get().await()
+            snapshot.documents.mapNotNull { it.toObject(Address::class.java) }
+        } catch (e: Exception) {
+            emptyList()  // Handle errors gracefully
+        }
+    }
 }
