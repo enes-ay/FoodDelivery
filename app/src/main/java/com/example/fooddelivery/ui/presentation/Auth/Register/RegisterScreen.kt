@@ -203,7 +203,9 @@ fun Register(modifier: Modifier = Modifier, navController: NavController) {
                 Button(
                     onClick = {
                         navController.navigate("login"){
-                            popUpTo("register")
+                            popUpTo("register"){
+                                inclusive = true
+                            }
                         }
                     },
                     modifier = Modifier.width(300.dp),

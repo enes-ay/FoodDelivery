@@ -41,6 +41,7 @@ import androidx.navigation.NavHostController
 import com.example.fooddelivery.BottomBar
 import com.example.fooddelivery.ui.presentation.Auth.AuthState
 import com.example.fooddelivery.ui.presentation.Auth.Login.LoginViewmodel
+import com.example.fooddelivery.ui.presentation.Auth.NavigationResult
 import com.example.fooddelivery.ui.theme.primaryColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,6 +50,7 @@ fun ProfileScreen(navController: NavHostController) {
     var showDialog by remember { mutableStateOf(false) }
     val loginViewmodel: LoginViewmodel = hiltViewModel()
     val authState by loginViewmodel.authState
+    val navState by loginViewmodel.navigationResult
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -113,9 +115,9 @@ fun ProfileScreen(navController: NavHostController) {
                 onDismiss = { showDialog = false },
                 onConfirm = {
                     loginViewmodel.signOut()
-                    if (authState is AuthState.Idle) {
-                        navController.navigate("login") {
-                            popUpTo("profile") {
+                    if (navState is NavigationResult.NavigateToHomeScreen){
+                        navController.navigate("login"){
+                            popUpTo(0){
                                 inclusive = true
                             }
                         }

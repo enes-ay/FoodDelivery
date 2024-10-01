@@ -9,6 +9,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.credentials.*
 import androidx.credentials.Credential
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.rememberNavController
@@ -18,6 +20,7 @@ import com.example.fooddelivery.common.Resource
 import com.example.fooddelivery.data.repository.AccountService
 import com.example.fooddelivery.data.repository.FirebaseAuthRepository
 import com.example.fooddelivery.ui.presentation.Auth.AuthState
+import com.example.fooddelivery.ui.presentation.Auth.NavigationResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -40,6 +43,9 @@ class LoginViewmodel @Inject constructor(
     private val _authState = mutableStateOf<AuthState>(AuthState.Idle)
     val authState: State<AuthState> = _authState
     val userLoggedIn = mutableStateOf(false)
+
+    private val _navigationResult = mutableStateOf<NavigationResult>(NavigationResult.NoNavigation)
+    val navigationResult: State<NavigationResult> = _navigationResult
 
     init {
         userLoggedIn.value = authRepository.isUserLoggedIn()
@@ -79,7 +85,8 @@ class LoginViewmodel @Inject constructor(
         _authState.value = when (result) {
             is Resource.Success -> {
                 userLoggedIn.value = false
-                AuthState.Idle
+                _navigationResult.value = NavigationResult.NavigateToHomeScreen
+                AuthState.Authenticated
             }
 
             is Resource.Error -> AuthState.Error(result.exception.message ?: "Unknown error")

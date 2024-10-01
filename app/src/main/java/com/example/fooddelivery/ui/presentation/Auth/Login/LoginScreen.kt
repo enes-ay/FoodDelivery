@@ -227,7 +227,6 @@ fun Login(navController: NavController) {
                                 popUpTo("login") { inclusive = true }
                             }
                         }
-
                         is AuthState.Error -> {
                             Text(
                                 text = (authState as AuthState.Error).message,
@@ -261,7 +260,9 @@ fun Login(navController: NavController) {
                         Text(
                             text = "Create here!",
                             modifier = Modifier
-                                .clickable { navController.navigate("register") },
+                                .clickable { navController.navigate("register"){
+                                    popUpTo("login")
+                                } },
                             fontSize = 16.sp,
                             color = primaryColor,
                             textAlign = TextAlign.Center
