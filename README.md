@@ -11,6 +11,7 @@ Preview Screenshots
   <img src="/Screenshots/cart.png" alt="Car Page" width="200"/>
   <img src="/Screenshots/search.png" alt="Search Page" width="200"/>
   <img src="/Screenshots/profile.png" alt="Profile Page" width="200"/>
+  <img src="/Screenshots/addressList.png" alt="Address List Page" width="200"/>
   <img src="/Screenshots/addAddress.png" alt="Add Address Page" width="200"/>
   <img src="/Screenshots/favorites.png" alt="Favorites Page" width="200"/>
   <img src="/Screenshots/list2.png" alt="List Page" width="200"/>

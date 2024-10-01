@@ -75,8 +75,8 @@ fun AddressScreen(navController: NavHostController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = {
-                    navController.navigate("profile") {
-                        popUpTo("address") {
+                    navController.navigate("addressList") {
+                        popUpTo("addAddress") {
                             inclusive = true
                         }
                     }

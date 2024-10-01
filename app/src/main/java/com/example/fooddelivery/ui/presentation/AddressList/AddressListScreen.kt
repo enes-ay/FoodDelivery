@@ -10,15 +10,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
@@ -59,13 +63,24 @@ fun AddressListScreen(navController: NavHostController) {
         topBar = {
             TopAppBar(
                 title = {
-                Text(
+                    Text(
                         text = "My Addresses",
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryColor)
+            )
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                text = { Text("Add Address", fontSize = 17.sp, fontWeight = FontWeight.Bold) },
+                icon = { Icon(Icons.Filled.Edit, contentDescription = "Add Address") },
+                onClick = {
+                    navController.navigate("addAddress")
+                },
+                containerColor = primaryColor,
+                contentColor = Color.White
             )
         }) { paddingValues ->
 
@@ -88,7 +103,7 @@ fun AddressItem(address: Address) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
-        .shadow(8.dp, RoundedCornerShape(16.dp)),
+            .shadow(8.dp, RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(16.dp),
     ) {
         Row(modifier = Modifier
@@ -136,6 +151,7 @@ fun AddressItem(address: Address) {
                 ) {
 
                     Icon(
+                        modifier = Modifier.size(30.dp),
                         imageVector = Icons.Outlined.Delete,
                         contentDescription = "arrow icon",
                         tint = primaryColor
