@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">FoodDelivery</string>
+    <string name="loginLabel">Giriş Yap</string>
+    <string name="emailPlaceHolder">Email</string>
+    <string name="passwordPlaceHolder">Parola</string>
+    <string name="loginButton">Giriş Yap</string>
+    <string name="dontHaveAccount">Hesabın yok mu?</string>
+    <string name="createHere">Hemen oluştur!</string>
+    <string name="googleButton">Google ile giriş yap</string>
+    <string name="registerLabel">Kayıt Ol</string>
+    <string name="registerButton">Kayıt ol</string>
+    <string name="cancelButton">İptal</string>
+    <string name="foodListLabel">Yemekler</string>
+    <string name="searchPlaceHolder">Yemek ara</string>
+    <string name="addCartButton">Sepete ekle</string>
+    <string name="goToCart">Sepete git</string>
+    <string name="cartLabel">Sepet</string>
+    <string name="total">Toplam</string>
+    <string name="confirmCart">Sepeti Onayla</string>
+    <string name="profileLabel">Profil</string>
+    <string name="myAddresses">Adreslerim</string>
+    <string name="updateProfile">Profili güncelle</string>
+    <string name="settings">Ayarlar</string>
+    <string name="faq">SSS</string>
+    <string name="signOut">Çıkış Yap</string>
+    <string name="favoritesLabel">Favori Yemekler</string>
+    <string name="myAddressLabel">Adreslerim</string>
+    <string name="addAddressButton">Adres Ekle </string>
+    <string name="addressLabel">Yeni Adres Ekle </string>
+    <string name="addStreet">Cadde \\ Sokak </string>
+    <string name="addBuildNo">Bina No </string>
+    <string name="addApartmentNo">Daire No </string>
+    <string name="addAddressLabel">Adres Başlığı </string>
+    <string name="addFullName">Ad Soyad </string>
+    <string name="addPhone">Tel. No </string>
+    <string name="addressSaveButton">Kaydet </string>
+    <string name="homeScreen">Ana Sayfa</string>
+    <string name="cartScreen">Sepet</string>
+    <string name="profileScreen">Profile</string>
+    <string name="favScreen">Favoriler</string>
+
+</resources>

@@ -34,12 +34,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.fooddelivery.R
 import com.example.fooddelivery.ui.theme.primaryColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,7 +104,7 @@ fun AddressScreen(navController: NavHostController) {
 
                 Text(
                     modifier = Modifier.padding(bottom = 20.dp),
-                    text = "Add new address",
+                    text = stringResource(id = R.string.addressLabel),
                     fontSize = 23.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -115,7 +117,7 @@ fun AddressScreen(navController: NavHostController) {
                     TextField(
                         value = streetName,
                         onValueChange = { streetName = it },
-                        label = { Text(text = "Street \\ Avenue") },
+                        label = { Text(text = stringResource(id = R.string.addStreet)) },
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
@@ -151,7 +153,7 @@ fun AddressScreen(navController: NavHostController) {
                         TextField(
                             value = buildingNo,
                             onValueChange = { buildingNo = it },
-                            label = { Text(text = "Building No.") },
+                            label = { Text(text =stringResource(id = R.string.addBuildNo)) },
                             colors = TextFieldDefaults.colors(
                                 unfocusedContainerColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
@@ -175,7 +177,7 @@ fun AddressScreen(navController: NavHostController) {
                         TextField(
                             value = apartmentNo,
                             onValueChange = { apartmentNo = it },
-                            label = { Text(text = "Apartment No.") },
+                            label = { Text(text = stringResource(id = R.string.addApartmentNo)) },
                             colors = TextFieldDefaults.colors(
                                 unfocusedContainerColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
@@ -206,7 +208,7 @@ fun AddressScreen(navController: NavHostController) {
                         ),
                     value = addressLabel,
                     onValueChange = { addressLabel = it },
-                    label = { Text(text = "Address Label") },
+                    label = { Text(text = stringResource(id = R.string.addAddressLabel)) },
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
@@ -230,7 +232,7 @@ fun AddressScreen(navController: NavHostController) {
                         ),
                     value = fullname,
                     onValueChange = { fullname = it },
-                    label = { Text(text = "Fullname") },
+                    label = { Text(text = stringResource(id = R.string.addFullName)) },
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
@@ -266,7 +268,7 @@ fun AddressScreen(navController: NavHostController) {
                         }
                     },
 
-                    label = { Text(text = "Phone Number") },
+                    label = { Text(text = stringResource(id = R.string.addPhone)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     maxLines = 1
                 )
@@ -310,7 +312,7 @@ fun AddressScreen(navController: NavHostController) {
                     )
                 ) {
                     Text(
-                        "Save", fontSize = 17.sp, fontWeight = FontWeight.Medium,
+                        stringResource(id = R.string.addressSaveButton), fontSize = 17.sp, fontWeight = FontWeight.Medium,
                         color = Color.White
                     )
                 }

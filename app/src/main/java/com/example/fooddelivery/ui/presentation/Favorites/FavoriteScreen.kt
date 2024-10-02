@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -60,7 +61,7 @@ fun Favorites(navController: NavHostController) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Favorites",
+                        text = stringResource(id = R.string.favoritesLabel),
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
@@ -146,7 +147,9 @@ fun CardItem(food: YemeklerFirebase,
             ) {
 
                 Row(
-                    modifier = Modifier.fillMaxSize().padding(end = 12.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(end = 12.dp),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

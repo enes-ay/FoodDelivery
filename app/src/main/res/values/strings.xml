@@ -1,3 +1,42 @@
 <resources>
     <string name="app_name">FoodDelivery</string>
+    <string name="loginLabel">Login</string>
+    <string name="emailPlaceHolder">Email</string>
+    <string name="passwordPlaceHolder">Password</string>
+    <string name="loginButton">Login</string>
+    <string name="dontHaveAccount">Don\'t you have an account?</string>
+    <string name="createHere">Create here!</string>
+    <string name="googleButton">Sign-in with Google</string>
+    <string name="registerLabel">Register</string>
+    <string name="registerButton">Register</string>
+    <string name="cancelButton">Cancel</string>
+    <string name="foodListLabel">Food List</string>
+    <string name="searchPlaceHolder">Search for food...</string>
+    <string name="addCartButton">Add to cart</string>
+    <string name="goToCart">Go to Cart</string>
+    <string name="cartLabel">Cart</string>
+    <string name="total">Total</string>
+    <string name="confirmCart">Confirm Cart</string>
+    <string name="profileLabel">Profile</string>
+    <string name="myAddresses">My Addresses</string>
+    <string name="updateProfile">Update Profile</string>
+    <string name="settings">Settings</string>
+    <string name="faq">FAQ</string>
+    <string name="signOut">Sign out</string>
+    <string name="favoritesLabel">Favorites</string>
+    <string name="myAddressLabel">My Addresses</string>
+    <string name="addAddressButton">Add Address </string>
+    <string name="addressLabel">Add new Address </string>
+    <string name="addStreet">Street \\ Avenue </string>
+    <string name="addBuildNo">Building No. </string>
+    <string name="addApartmentNo">Apartment No. </string>
+    <string name="addAddressLabel">Address Label. </string>
+    <string name="addFullName">Full Name </string>
+    <string name="addPhone">Phone Number </string>
+    <string name="addressSaveButton">Save </string>
+    <string name="homeScreen">Home</string>
+    <string name="cartScreen">Cart</string>
+    <string name="profileScreen">Profile</string>
+    <string name="favScreen">Favorites</string>
+
 </resources>

@@ -30,12 +30,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.fooddelivery.BottomBar
+import com.example.fooddelivery.R
 import com.example.fooddelivery.ui.presentation.Auth.Login.LoginViewmodel
 import com.example.fooddelivery.ui.presentation.Auth.States.NavigationResult
 import com.example.fooddelivery.ui.theme.primaryColor
@@ -56,7 +58,7 @@ fun ProfileScreen(navController: NavHostController) {
                 TopAppBar(
                     title = {
                         Text(
-                            text = "Profile",
+                            text = stringResource(id = R.string.profileLabel),
                             fontSize = 24.sp,
                             color = Color.White,
                             fontWeight = FontWeight.Bold
@@ -94,13 +96,13 @@ fun ProfileScreen(navController: NavHostController) {
 
             Column(modifier = Modifier.fillMaxSize()) {
 
-                ProfileItem("My Addresses", onClick = {
+                ProfileItem(stringResource(id = R.string.myAddresses), onClick = {
                     navController.navigate("addressList")
                 })
-                ProfileItem("Update Profile", onClick = {})
-                ProfileItem("Settings", onClick = {})
-                ProfileItem("FAQ", onClick = {})
-                ProfileItem("Sign out", onClick = {
+                ProfileItem(stringResource(id = R.string.updateProfile), onClick = {})
+                ProfileItem(stringResource(id = R.string.settings), onClick = {})
+                ProfileItem(stringResource(id = R.string.faq), onClick = {})
+                ProfileItem(stringResource(id = R.string.signOut), onClick = {
                     showDialog = true
                 })
 

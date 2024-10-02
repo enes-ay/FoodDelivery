@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -55,6 +56,7 @@ import androidx.credentials.exceptions.GetCredentialException
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.fooddelivery.BuildConfig
+import com.example.fooddelivery.R
 import com.example.fooddelivery.ui.theme.primaryColor
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import kotlinx.coroutines.launch
@@ -99,7 +101,7 @@ fun Login(navController: NavController) {
                         modifier = Modifier
                             .wrapContentSize()
                             .padding(vertical = 20.dp),
-                        text = "Login",
+                        text = stringResource(id = R.string.loginLabel),
                         style = MaterialTheme.typography.displaySmall,
                         fontWeight = FontWeight.Medium,
                         color = primaryColor
@@ -114,7 +116,7 @@ fun Login(navController: NavController) {
                             emailError.value = null
                         },
 
-                        label = { Text("Email") },
+                        label = { Text(text = stringResource(id = R.string.emailPlaceHolder)) },
                         isError = emailError.value != null,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.textFieldColors(
@@ -141,7 +143,7 @@ fun Login(navController: NavController) {
                             password.value = it
                             passwordError.value = null
                         },
-                        label = { Text("Password") },
+                        label = { Text(text = stringResource(id = R.string.passwordPlaceHolder)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         isError = passwordError.value != null,
@@ -195,7 +197,7 @@ fun Login(navController: NavController) {
                                 containerColor = primaryColor,
                             )
                         ) {
-                            Text("Login", fontSize = 17.sp, fontWeight = FontWeight.Medium)
+                            Text(stringResource(id = R.string.loginButton), fontSize = 17.sp, fontWeight = FontWeight.Medium)
                         }
 
                         is AuthState.Loading -> CircularProgressIndicator()
@@ -234,13 +236,13 @@ fun Login(navController: NavController) {
                         horizontalArrangement = Arrangement.Absolute.Center
                     ) {
                         Text(
-                            text = "Don't have an account? ",
+                            text = stringResource(id = R.string.dontHaveAccount),
                             fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.secondary,
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "Create here!",
+                            text = " " + stringResource(id = R.string.createHere),
                             modifier = Modifier
                                 .clickable { navController.navigate("register"){
                                     popUpTo("login")
@@ -303,7 +305,7 @@ fun GoogleLoginButton(
             }
 
         }) {
-        Text("Sign in with Google", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+        Text(stringResource(id = R.string.googleButton), fontSize = 16.sp, fontWeight = FontWeight.Medium)
     }
 
 }

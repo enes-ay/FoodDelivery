@@ -39,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -120,20 +121,11 @@ fun BottomBar(navController: NavController) {
                     }
                 },
                 icon = {
-                    when (item.label) {
-                        "Home" -> Icon(Icons.Outlined.Home, contentDescription = "Home")
-                        "Favorites" -> Icon(
-                            Icons.Outlined.FavoriteBorder,
-                            contentDescription = "Favorites"
-                        )
-
-                        "Cart" -> Icon(Icons.Outlined.ShoppingCart, contentDescription = "Cart")
-                        "Profile" -> Icon(Icons.Outlined.Person, contentDescription = "Profile")
-                    }
+                    Icon(item.icon, contentDescription = stringResource(id = item.labelResId))
                 },
                 label = {
                     Text(
-                        text = item.label,
+                        text = stringResource(id = item.labelResId),
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp
                     )

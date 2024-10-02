@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -98,7 +99,7 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
                               contentColor = Color.White // Beyaz yazı rengi
                           )
                       ) {
-                          Text(text = "Add to cart", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                          Text(text =  stringResource(id = R.string.addCartButton), fontSize = 15.sp, fontWeight = FontWeight.Bold)
                       }
                   } else {
                       // "-" butonu, sayacı ve "+" butonu
@@ -157,9 +158,9 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
             ) {
                 Button(
                     modifier = Modifier
-                        .defaultMinSize(minWidth = 200.dp) // Butonun minimum genişliği sabit
+                        .defaultMinSize(minWidth = 200.dp)
                         .padding(end = 10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = primaryColor),// Sağdan biraz boşluk bırakıyoruz
+                    colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
                     onClick = {
                         if(count>0){
                             foodDetailViewmodel.addFoodToCart(food.yemek_adi,food.yemek_resim_adi, food.yemek_fiyat, count, "enes" )
@@ -175,14 +176,14 @@ fun FoodDetailScreen(navController: NavController, food: Yemekler) {
                     shape = RectangleShape
                 ) {
                     Text(
-                        text = "Go to Cart",
+                        text = stringResource(id = R.string.goToCart),
                         color = Color.White,
                         fontSize = 23.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
                 Text(
-                    text = "Total:  ${totalPrice}₺",
+                    text = stringResource(id = R.string.total) + "  $totalPrice₺",
                     style = MaterialTheme.typography.h5,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )

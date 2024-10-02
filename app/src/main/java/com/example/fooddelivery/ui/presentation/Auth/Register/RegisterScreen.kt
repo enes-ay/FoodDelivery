@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.fooddelivery.R
 import com.example.fooddelivery.ui.presentation.Auth.States.AuthState
 import com.example.fooddelivery.ui.theme.primaryColor
 
@@ -75,7 +77,7 @@ fun Register(modifier: Modifier = Modifier, navController: NavController) {
                     modifier = Modifier
                         .wrapContentSize()
                         .padding(vertical = 20.dp),
-                    text = "Register",
+                    text = stringResource(id = R.string.registerLabel),
                     style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.Medium,
                     color = primaryColor
@@ -88,7 +90,7 @@ fun Register(modifier: Modifier = Modifier, navController: NavController) {
                         email.value = it
                         emailError.value = null
                     },
-                    label = { Text("Email") },
+                    label = { Text(stringResource(id = R.string.emailPlaceHolder)) },
                     isError = emailError.value != null,
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Color.White,
@@ -113,7 +115,7 @@ fun Register(modifier: Modifier = Modifier, navController: NavController) {
                         password.value = it
                         passwordError.value = null
                     },
-                    label = { Text("Password") },
+                    label = { Text(stringResource(id = R.string.passwordPlaceHolder)) },
                     isError = passwordError.value != null,
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation() ,
                     trailingIcon = {
@@ -168,7 +170,7 @@ fun Register(modifier: Modifier = Modifier, navController: NavController) {
                                 containerColor = primaryColor
                             )
                         ) {
-                            Text("Register", color = Color.White, fontSize = 17.sp)
+                            Text(stringResource(id = R.string.registerButton), color = Color.White, fontSize = 17.sp)
                         }
 
                     is AuthState.Loading -> CircularProgressIndicator()
@@ -210,7 +212,7 @@ fun Register(modifier: Modifier = Modifier, navController: NavController) {
                         containerColor = primaryColor
                     )
                 ) {
-                    Text("Cancel", color = Color.White, fontSize = 17.sp)
+                    Text(stringResource(id = R.string.cancelButton), color = Color.White, fontSize = 17.sp)
                 }
 
             }

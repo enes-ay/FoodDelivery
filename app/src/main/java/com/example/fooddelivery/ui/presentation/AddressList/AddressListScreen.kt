@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.fooddelivery.R
 import com.example.fooddelivery.data.model.Address
 import com.example.fooddelivery.data.model.YemeklerFirebase
 import com.example.fooddelivery.ui.theme.primaryColor
@@ -64,7 +66,7 @@ fun AddressListScreen(navController: NavHostController) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "My Addresses",
+                        text = stringResource(id = R.string.myAddressLabel),
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
@@ -74,7 +76,7 @@ fun AddressListScreen(navController: NavHostController) {
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                text = { Text("Add Address", fontSize = 17.sp, fontWeight = FontWeight.Bold) },
+                text = { Text(stringResource(id = R.string.addAddressButton), fontSize = 17.sp, fontWeight = FontWeight.Bold) },
                 icon = { Icon(Icons.Filled.Edit, contentDescription = "Add Address") },
                 onClick = {
                     navController.navigate("addAddress")

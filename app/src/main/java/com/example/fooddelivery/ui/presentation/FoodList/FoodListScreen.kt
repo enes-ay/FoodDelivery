@@ -54,6 +54,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -92,12 +93,12 @@ fun FoodListScreen(navController: NavHostController) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             Column {
-                TopAppBar(title = { Text(text = "Food List", color = Color.White, fontWeight = FontWeight.Bold) },
+                TopAppBar(title = { Text(text =  stringResource(id = R.string.foodListLabel), color = Color.White, fontWeight = FontWeight.Bold) },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryColor))
                 TextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    placeholder = { Text(text = "Search for food...") },
+                    placeholder = { Text(text = stringResource(id = R.string.searchPlaceHolder)) },
                     leadingIcon = {
                         if (isFocused) {
                             IconButton(onClick = {
@@ -129,13 +130,12 @@ fun FoodListScreen(navController: NavHostController) {
                             }
                         }
                     },
-                    singleLine = true, // Tek satırlık giriş
-                    shape = RoundedCornerShape(8.dp), // Köşeleri yuvarlatılmış
+                    singleLine = true,
+                    shape = RoundedCornerShape(8.dp),
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Color.White,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        // placeholderColor = Color.Gray // Placeholder rengi
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -216,7 +216,9 @@ fun FoodItemCard(
         shape = RoundedCornerShape(16.dp),
     ) {
 
-        Box(modifier = Modifier.fillMaxSize().background(Color.White)){
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)){
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -273,7 +275,7 @@ fun FoodItemCard(
                                 )
                             ) {
                                 Text(
-                                    text = "Add to cart",
+                                    text =  stringResource(id = R.string.addCartButton),
                                     fontSize = 15.sp,
                                     fontWeight = FontWeight.Bold
                                 )
